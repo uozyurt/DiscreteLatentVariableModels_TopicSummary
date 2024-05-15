@@ -220,7 +220,7 @@ $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 Slide 32:<br>
 
 
-$$\mathbf{z} = \text{one\_hot} \left( \arg \max{_i} (g_i + \log \pi) \right)$$
+$$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
 
 $$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
 
@@ -256,9 +256,12 @@ Slide 37:<br>
 
 $$p(z_1 = i) \propto s_i$$
 
-$$q_s(z) = \dfrac{s_{z1}}{Z} \dfrac{s_{z2}}{Z - s_{z1}} \dfrac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \dfrac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}$$
+$$
+q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}
+$$
 
 where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
+
 
 
 
