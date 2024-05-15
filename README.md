@@ -67,7 +67,7 @@ This natural (abundant) appearance of this discreteness forces us to use discret
 
 
 ## Stochastic Optimization
-Slide 5:
+Slide 5:<br>
 $$
 \max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
 $$
@@ -81,7 +81,7 @@ p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z) = \sum_
 $$
 
 
-Slide 6:
+Slide 6:<br>
 
 $$
 \max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
@@ -99,13 +99,13 @@ $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
 
 ## REINFORCE Method
-Slide 7, 8:
+Slide 7, 8:<br>
 
 $$
 \max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
 $$
 
-Slide 9-14:
+Slide 9-14:<br>
 
 $$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
@@ -113,7 +113,7 @@ $$\frac{\partial}{\partial \phi_{i}} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} 
 
 $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = \mathbb{E}_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
 
-Slide 15, 16:
+Slide 15, 16:<br>
 
 $$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
@@ -127,7 +127,7 @@ $$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z
 
 ## Variational Learning of Latent Variable Models
 
-Slide 17:
+Slide 17:<br>
 
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
@@ -138,18 +138,18 @@ $$\mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(
 
 $$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
 
-Slide 18:
+Slide 18:<br>
 
 $$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
 $$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \mathbb{E}_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) := f_{MC}(z^1, \cdots , z^K)$$
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) :<br>= f_{MC}(z^1, \cdots , z^K)$$
 
 $$\mathbb{E}_{z^1, \cdots , z^K \sim q_{\phi}(z)} [f_{MC}(z^1, \cdots , z^K)] = \nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
 
 
-Slide 19:
+Slide 19:<br>
 
 $$\nabla_{\theta} \mathbb{E}_{q} [x^2]$$
 
@@ -164,15 +164,15 @@ $$\nabla_{\theta} \mathbb{E}_{q} [x^2] = \nabla_{\theta} \mathbb{E}_{p} [(\theta
 
 ## Neural Variational Inference and Learning (NVIL)
 
-Slide 27:
+Slide 27:<br>
 
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
 $$= \mathbb{E}_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
 
-$$:= \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
+$$:<br>= \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
 
-Slide 28:
+Slide 28:<br>
 
 $$\mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
 
@@ -183,13 +183,13 @@ $$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x
 
 ## Towards Reparameterized, Continuous Relaxations
 
-Slide 29:
+Slide 29:<br>
 
 $$
 \max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
 $$
 
-Slide 30:
+Slide 30:<br>
 
 $$g = \max \{y_1, y_2, \ldots, y_n\}$$
 
@@ -197,29 +197,29 @@ $$F(g; \mu, \beta) = \exp \left( - \exp \left( - \frac{g - \mu}{\beta} \right) \
 
 ## Categorical Distributions and Gumbel-Softmax
 
-Slide 31:
+Slide 31:<br>
 
 $$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 
-Slide 32:
+Slide 32:<br>
 
 $$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
 
 $$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
 
-Slide 33:
+Slide 33:<br>
 
-$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \frac{g_i + \log \pi}{\tau} \right)$$
 
-Slide 35:
+Slide 35:<br>
 
 $$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
 
 $$\max_{\phi} \mathbb{E}_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
-## Combinatorial, Discrete Objects: Permutations
+## Combinatorial, Discrete Objects:<br> Permutations
 
-Slide 36:
+Slide 36:<br>
 
 $$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
 
@@ -230,7 +230,7 @@ $$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
 
 ## Plackett-Luce (PL) Distribution
 
-Slide 37:
+Slide 37:<br>
 
 $$p(z_1 = i) \propto s_i$$
 
@@ -242,7 +242,7 @@ where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
 
 ## Relaxing PL Distribution to Gumbel-PL
 
-Slide 38:
+Slide 38:<br>
 
 
 $$\tilde{s}_i = g_i + \log s_i$$
