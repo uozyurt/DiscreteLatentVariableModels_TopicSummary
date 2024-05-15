@@ -1,3 +1,8 @@
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
 # <a href="[http//www.google.com](https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796)"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
 # <p style="text-align:center">Discrete Latent Variable Models</p>
@@ -260,8 +265,7 @@ $$
 q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}
 $$
 
-where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
-
+where `$Z = \sum_{i=1}^{k} s_i$` is the normalizing constant.
 
 
 
