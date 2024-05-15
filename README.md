@@ -67,42 +67,162 @@ This natural (abundant) appearance of this discreteness forces us to use discret
 
 
 ## Stochastic Optimization
+Slide 5:
+$$
+\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+$$
+
+$$
+\max_{\theta, \phi} \mathbb{E}_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
+$$
+
+$$
+p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z) = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z) = \mathbb{E}_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
+$$
+
+
+Slide 6:
+
+$$
+\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+$$
+
+$$
+\max_{\theta, \phi} \mathbb{E}_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
+$$
+
+$$\nabla_{\theta} \mathbb{E}_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = \mathbb{E}_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
 
 
 
+$$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
 
 ## REINFORCE Method
+Slide 7, 8:
 
+$$
+\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+$$
+
+Slide 9-14:
+
+$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+
+$$\frac{\partial}{\partial \phi_{i}} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z) = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+
+$$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = \mathbb{E}_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
+
+Slide 15, 16:
+
+$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+
+
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \mathbb{E}_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
 
 
 
 
 ## Variational Learning of Latent Variable Models
 
+Slide 17:
+
+$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
+
+$$= \mathbb{E}_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
+
+$$\mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)$$
 
 
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
+
+Slide 18:
+
+$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \mathbb{E}_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+
+$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) := f_{MC}(z^1, \cdots , z^K)$$
+
+$$\mathbb{E}_{z^1, \cdots , z^K \sim q_{\phi}(z)} [f_{MC}(z^1, \cdots , z^K)] = \nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+
+
+Slide 19:
+
+$$\nabla_{\theta} \mathbb{E}_{q} [x^2]$$
+
+$$q_{\theta}(x) = \mathcal{N}(\theta, 1)$$
+
+$$\mathbb{E}_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = \mathbb{E}_{q} [x^2 (x - \theta)]$$
+
+$$x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)$$
+
+$$\nabla_{\theta} \mathbb{E}_{q} [x^2] = \nabla_{\theta} \mathbb{E}_{p} [(\theta + \epsilon)^2] = \mathbb{E}_{p} [2(\theta + \epsilon)]$$
 
 
 ## Neural Variational Inference and Learning (NVIL)
 
+Slide 27:
+
+$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
+
+$$= \mathbb{E}_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
+
+$$:= \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
+
+Slide 28:
+
+$$\mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
+
+$$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - h_{\psi}(x) - B) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
 
 
 
 
 ## Towards Reparameterized, Continuous Relaxations
 
+Slide 29:
 
+$$
+\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+$$
 
+Slide 30:
 
+$$g = \max \{y_1, y_2, \ldots, y_n\}$$
+
+$$F(g; \mu, \beta) = \exp \left( - \exp \left( - \frac{g - \mu}{\beta} \right) \right)$$
 
 ## Categorical Distributions and Gumbel-Softmax
 
+Slide 31:
 
+$$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 
+Slide 32:
 
+$$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
+
+$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+
+Slide 33:
+
+$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+
+Slide 35:
+
+$$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+
+$$\max_{\phi} \mathbb{E}_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
 ## Combinatorial, Discrete Objects: Permutations
+
+Slide 36:
+
+$$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+
 
 
 
@@ -110,13 +230,22 @@ This natural (abundant) appearance of this discreteness forces us to use discret
 
 ## Plackett-Luce (PL) Distribution
 
+Slide 37:
 
+$$p(z_1 = i) \propto s_i$$
+
+$$q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}$$
+
+where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
 
 
 
 ## Relaxing PL Distribution to Gumbel-PL
 
+Slide 38:
 
+
+$$\tilde{s}_i = g_i + \log s_i$$
 
 
 
