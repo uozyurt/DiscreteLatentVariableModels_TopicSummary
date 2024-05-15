@@ -69,29 +69,29 @@ This natural (abundant) appearance of this discreteness forces us to use discret
 ## Stochastic Optimization
 Slide 5:<br>
 $$
-\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+\max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 $$
-\max_{\theta, \phi} \mathbb{E}_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
+\max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
 
 $$
-p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z) = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z) = \mathbb{E}_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
+p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z) = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z) = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
 
 Slide 6:<br>
 
 $$
-\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+\max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 $$
-\max_{\theta, \phi} \mathbb{E}_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
+\max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
 
-$$\nabla_{\theta} \mathbb{E}_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = \mathbb{E}_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
+$$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
 
 
 
@@ -102,25 +102,25 @@ $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 Slide 7, 8:<br>
 
 $$
-\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+\max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 Slide 9-14:<br>
 
-$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+$$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
-$$\frac{\partial}{\partial \phi_{i}} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z) = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+$$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)] = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z) = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
-$$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = \mathbb{E}_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
+$$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
 
 Slide 15, 16:<br>
 
-$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+$$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \mathbb{E}_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
+$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
 
 
 
@@ -131,35 +131,35 @@ Slide 17:<br>
 
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
-$$= \mathbb{E}_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
+$$= E_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
 
-$$\mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)$$
+$$E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)$$
 
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
+$$\nabla_{\phi} E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
 
 Slide 18:<br>
 
-$$\mathbb{E}_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+$$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] = \mathbb{E}_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
-$$\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) :<br>= f_{MC}(z^1, \cdots , z^K)$$
+$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) :<br>= f_{MC}(z^1, \cdots , z^K)$$
 
-$$\mathbb{E}_{z^1, \cdots , z^K \sim q_{\phi}(z)} [f_{MC}(z^1, \cdots , z^K)] = \nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+$$E_{z^1, \cdots , z^K \sim q_{\phi}(z)} [f_{MC}(z^1, \cdots , z^K)] = \nabla_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 
 Slide 19:<br>
 
-$$\nabla_{\theta} \mathbb{E}_{q} [x^2]$$
+$$\nabla_{\theta} E_{q} [x^2]$$
 
-$$q_{\theta}(x) = \mathcal{N}(\theta, 1)$$
+$$q_{\theta}(x) = N(\theta, 1)$$
 
-$$\mathbb{E}_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = \mathbb{E}_{q} [x^2 (x - \theta)]$$
+$$E_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = E_{q} [x^2 (x - \theta)]$$
 
 $$x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)$$
 
-$$\nabla_{\theta} \mathbb{E}_{q} [x^2] = \nabla_{\theta} \mathbb{E}_{p} [(\theta + \epsilon)^2] = \mathbb{E}_{p} [2(\theta + \epsilon)]$$
+$$\nabla_{\theta} E_{q} [x^2] = \nabla_{\theta} E_{p} [(\theta + \epsilon)^2] = E_{p} [2(\theta + \epsilon)]$$
 
 
 ## Neural Variational Inference and Learning (NVIL)
@@ -168,15 +168,15 @@ Slide 27:<br>
 
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
-$$= \mathbb{E}_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
+$$= E_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
 
-$$:<br>= \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
+$$:<br>= E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
 
 Slide 28:<br>
 
-$$\mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
+$$\mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
 
-$$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - h_{\psi}(x) - B) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
+$$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - h_{\psi}(x) - B) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
 
 
 
@@ -186,7 +186,7 @@ $$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = \mathbb{E}_{q_{\phi}(z|x
 Slide 29:<br>
 
 $$
-\max_{\phi} \mathbb{E}_{q_{\phi}(z)}[f(z)]
+\max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 Slide 30:<br>
@@ -213,15 +213,15 @@ $$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \frac{g_i + \log \pi}{\tau} \
 
 Slide 35:<br>
 
-$$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+$$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
-$$\max_{\phi} \mathbb{E}_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
+$$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
 ## Combinatorial, Discrete Objects:<br> Permutations
 
 Slide 36:<br>
 
-$$\max_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)]$$
+$$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 
 
