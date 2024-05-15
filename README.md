@@ -68,6 +68,7 @@ This natural (abundant) appearance of this discreteness forces us to use discret
 
 ## Stochastic Optimization
 Slide 5:<br>
+
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
@@ -82,6 +83,7 @@ $$
 
 
 Slide 6:<br>
+
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
@@ -101,11 +103,13 @@ $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 ## REINFORCE Method
 Slide 7, 8:<br>
 
+
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 Slide 9-14:<br>
+
 
 $$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
@@ -114,6 +118,7 @@ $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)] = \sum_{z} \frac{\pa
 $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
 
 Slide 15, 16:<br>
+
 
 $$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
@@ -129,6 +134,7 @@ $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabl
 
 Slide 17:<br>
 
+
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
 $$= E_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
@@ -140,16 +146,19 @@ $$\nabla_{\phi} E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = E_{q_{\phi}(z|x)} [f
 
 Slide 18:<br>
 
+
 $$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
 
 $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
-$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) :<br>= f_{MC}(z^1, \cdots , z^K)$$
+$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k) :<br>
+= f_{MC}(z^1, \cdots , z^K)$$
 
 $$E_{z^1, \cdots , z^K \sim q_{\phi}(z)} [f_{MC}(z^1, \cdots , z^K)] = \nabla_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 
 Slide 19:<br>
+
 
 $$\nabla_{\theta} E_{q} [x^2]$$
 
@@ -166,13 +175,16 @@ $$\nabla_{\theta} E_{q} [x^2] = \nabla_{\theta} E_{p} [(\theta + \epsilon)^2] = 
 
 Slide 27:<br>
 
+
 $$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
 
 $$= E_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
 
-$$:<br>= E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
+$$:<br>
+= E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
 
 Slide 28:<br>
+
 
 $$\mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
 
@@ -185,11 +197,13 @@ $$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\p
 
 Slide 29:<br>
 
+
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
 Slide 30:<br>
+
 
 $$g = \max \{y_1, y_2, \ldots, y_n\}$$
 
@@ -199,9 +213,11 @@ $$F(g; \mu, \beta) = \exp \left( - \exp \left( - \frac{g - \mu}{\beta} \right) \
 
 Slide 31:<br>
 
+
 $$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 
 Slide 32:<br>
+
 
 $$\mathbf{z} = \text{one\_hot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
 
@@ -209,17 +225,21 @@ $$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \ri
 
 Slide 33:<br>
 
+
 $$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \frac{g_i + \log \pi}{\tau} \right)$$
 
 Slide 35:<br>
+
 
 $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
-## Combinatorial, Discrete Objects:<br> Permutations
+## Combinatorial, Discrete Objects:<br>
+ Permutations
 
 Slide 36:<br>
+
 
 $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
@@ -232,6 +252,7 @@ $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 Slide 37:<br>
 
+
 $$p(z_1 = i) \propto s_i$$
 
 $$q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}$$
@@ -243,6 +264,7 @@ where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
 ## Relaxing PL Distribution to Gumbel-PL
 
 Slide 38:<br>
+
 
 
 $$\tilde{s}_i = g_i + \log s_i$$
