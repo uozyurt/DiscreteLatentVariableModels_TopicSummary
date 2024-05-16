@@ -1,4 +1,4 @@
-# <a href="[http//www.google.com](https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796)"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
 # <p style="text-align:center">Discrete Latent Variable Models</p>
 
@@ -137,33 +137,56 @@ In this case, we can utilize the REINFORCE Method, explained in th next section.
 <br>
 
 ## REINFORCE Method
-Slide 7, 8:<br>
 
+REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights [[1]](#1). It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
+<b>RE</b>ward <b>I</b>ncrement = <b>N</b>on-negative <b>F</b>actor × <b>O</b>ffset <b>R</b>einforcement × <b>C</b>haracteristic <b>E</b>ligibility
+
+It's main goal is to optimize the expected reward, but it can be used in the problems where discrete latent variables or discrete actions exist. We are going to use the REINFORCE method to optimize the following objective function:
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
-Slide 9-14:<br>
+Here, our policy is $q_{\phi}(z)$, having the parameters $\phi$. With REINFORCE, we try to maximize the expected reward by updating the policy parameters $\phi$.<br>
+
+But first, we need some mathematical tricks in the computation of the gradients. Normally we want to calculate (or estimate):
+
+$$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
+
+But with this form, we cannot calculate the gradient directly (since it is infeasible to calculate the expectation with all possible z values). Furthermore, we cannot estime the gradient by sampling z values from $q_{\phi}(z)$, because the expectation $E_{q_{\phi}(z)}$ is not in the gradient. So, we need to get it out. We can use the following trick to do this:
 
 
-$$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+$$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
 
-$$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)] = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z) = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+Expand the expectation:
 
-$$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right]$$
+$$= \frac{\partial}{\partial \phi_{i}} \sum_{z} q_{\phi}(z) f(z)$$
 
-Slide 15, 16:<br>
+Take the derivative inside the sum:
 
+$$ = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
-$$E_{q_{\phi}(z)} [f(z)] = \sum_{z} q_{\phi}(z) f(z)$$
+Introduce $\dfrac{q_{\phi}(z)}{q_{\phi}(z)}$:
 
+$$ = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
-$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+Here is the important part. We have the log-derivative rule $\dfrac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} = \dfrac{1}{q_{\phi}(z)} \dfrac{\partial q_{\phi}(z)}{\partial \phi_{i}}$. So, we can rewrite the equation above as:
+
+$$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+
+Now, we can rewrite the equation as an expectation:
+
+$$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+
+By making these operations, we can now estimate the gradient by sampling z values from $q_{\phi}(z)$, taking the gradient of the log-probability of the z values, and multiplying it with the function value of z. This is the main idea of the REINFORCE method.<br>
+
+We are able to sampke $K$ times from $q_{\phi}(z)$, and estimate the gradient as:
 
 $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
 
+This form can be interpreted as a gradient update, weighted in a way which maximizes the expected reward.
 
+TODO: add citations and more comments
 
 
 
@@ -371,21 +394,78 @@ $$\tilde{s}_i = g_i + \log s_i$$
 <br>
 
 ## References
+Example citation generator:<br>
+https://www.scribbr.com/citation/generator/ <br> <br>
 TODO: make the references appropriate <br>
-Example reference usage : [[1]](#1)
+Example reference usage : [[5]](#5) <br>
+Example reference usage : ([Yigit, 2022](#6)) <br>
+Example reference usage : ([Ozyurt et al., 2023](#2))
 <br>
 <br>
 <br>
 
 
 <a id="1">[1]</a> 
-Bartolucci, F., Pandolfi, S., & Pennoni, F. (2022). Discrete latent variable models. Annual Review of Statistics and Its Application, 9(1), 425–452. https://doi.org/10.1146/annurev-statistics-040220-091910
+Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. Machine Learning, 8(3–4), 229–256. https://doi.org/10.1007/bf00992696
+
+
+
+<br>
+
+<a id="2">[2]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="3">[3]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="4">[4]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="5">[5]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="6">[6]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="7">[7]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="8">[8]</a> 
+FILLER
+
+
+
+
 
 <br>
 <br>
 
-### Notes:
+### Additional Notes:
 
-For the most of the content, slides from cs236 lecture in "Stanfor University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
+* For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
-Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
+* Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
