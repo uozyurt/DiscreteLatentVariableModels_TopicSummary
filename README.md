@@ -246,8 +246,8 @@ But still, we cannot use the reparameterization trick for discrete latent variab
 
 <div style="text-align: center;">
     <figure>
-    <img src=figures/comparison_of_techniques.png alt="Graph example">
-    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparameterization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
+    <img src=figures/comparison_of_techniques.png alt="technique comparisons">
+    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
     </figure>
 </div>
 
@@ -255,6 +255,8 @@ But still, we cannot use the reparameterization trick for discrete latent variab
 <br>
 
 ## Neural Variational Inference and Learning (NVIL)
+
+TODO: I SKIPPED HERE. We have to talk about the control variates if we are going to talk about NVIL. <br>
 
 Slide 27:<br>
 
@@ -282,23 +284,43 @@ $$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\p
 
 ## Towards Reparameterized, Continuous Relaxations
 
-Slide 29:<br>
+The term "continuos relaxation" is a technique to approximate the discrete variables with continuous variables. Since we have discrete latent variables and cannot use the reparametrization technique directly, and we have high variance in the REINFORCE method if we do not meticulously adjust the control variates, it is a plausible choice to go with the continuous relaxation to utilize the reparametrization trick. <br>
 
+To get a continuous relaxation, there is a distribution utilized for this purpose. It is called "Gumbel" distribution, and it is useful in representing the extreme events.<br>
+
+The CDF of the Gumbel distribution is:
+
+$$F(x; \mu, \beta) = e^{-e^{-(x - \mu)/\beta}}$$
+
+Again, we want to optimize the following objective function by maximizing it:
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
-Slide 30:<br>
+
+If we choose the Gumbel distribution to be standard ($\mu = 0$ and $\beta = 1$), we can write the Standard Gumbel distribution as:
+
+$$G(x) = e^{-e^{-x}}$$
 
 
-$$g = \max \{y_1, y_2, \ldots, y_n\}$$
+Here are the example of the Gumbel distribution PDF visualizations for a better understanding:
 
-$$F(g; \mu, \beta) = \exp \left( - \exp \left( - \frac{g - \mu}{\beta} \right) \right)$$
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values.png alt="Gumbel distribution PDF">
+    <figcaption>Fig 5. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here here) https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731 </figcaption>
+    </figure>
+</div>
+
+Additional knowledge: <br>
+Note that the mean is not equal to $\mu$. Actually, when the calculations are done, the mean is equal to $\mu + \beta \gamma$, where $\gamma$ is the Euler-Mascheroni constant ($\approx 0.577$). That is why when Gumbel with $\mu = 0 , \beta = 1$ has a different mean than the Gumbel with $\mu = 0 , \beta = 2$<br>
+
 
 
 <br>
 <br>
+
 
 ## Categorical Distributions and Gumbel-Softmax
 
@@ -436,14 +458,14 @@ Reinforcement learning: An introduction. Sutton & Barto Book: Reinforcement Lear
 <br>
 
 <a id="3">[3]</a> 
-FILLER
+Maddison, C. J., Tarlow, D., & Minka, T. (2014, October 31). A* sampling. arXiv.org. https://arxiv.org/abs/1411.0030
 
 
 
 <br>
 
 <a id="4">[4]</a> 
-FILLER
+Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
 
 
 
