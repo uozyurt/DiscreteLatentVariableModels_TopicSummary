@@ -1,8 +1,3 @@
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
 # <a href="[http//www.google.com](https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796)"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
 # <p style="text-align:center">Discrete Latent Variable Models</p>
@@ -15,6 +10,10 @@
 ### <p style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
 ### <p style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
 
+
+
+<br>
+<br>
 
 ## Table of contents
 1.  [Why Discrete Latent Variables?](#why-discrete-latent-variables)
@@ -31,11 +30,15 @@
 12. [References](#references)
 
 
+
+<br>
+<br>
+
 ## Why Discrete Latent Variables?
 
 Discrete latent variables are hidden variables in models that take on a finite set of distinct values. They are crucial in decision-making processes and learning structures because they help capture the inherent discreteness in various types of data and systems. <br>
 
-The most basic understanding for this question stems from the real-world data representations. One can simply observe how the “data” is represented in the examples below:
+The most natural answer for the "Why should we use them?" question stems from the real-world data representations. One can simply observe how the “data” is represented in the examples below:
 
 
 <div style="text-align: center;">
@@ -45,6 +48,7 @@ The most basic understanding for this question stems from the real-world data re
     </figure>
 </div>
 
+<br>
 
 <div style="text-align: center;">
     <figure>
@@ -53,6 +57,7 @@ The most basic understanding for this question stems from the real-world data re
     </figure>
 </div>
 
+<br>
 
 TODO: ADD GRAPH FIGURE:
 <div style="text-align: center;">
@@ -66,45 +71,70 @@ TODO: ADD GRAPH FIGURE:
 
 
 
-In addition to the DNA sequence, game state and graph representation examples above, we have many additional data representation domains (e.g. text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data…) where the data is/has inherently discrete representations.<br>
+In addition to the DNA sequence, game state and graph representation examples above, we have many additional data domains (e.g. text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data) where the data is/has inherently discrete representations.<br>
 
-This natural (abundant) appearance of this discreteness forces us to use discrete latent variable models since some assumptions may fail in classic latent variable models due to the discontinuity of the data. Hence, if one wants to work with the real-world data using latent variable models, they probably will confront some assumption fails and change their perception to the discrete latent variables realm.
+This natural and abundant appearance of the discreteness shifts us to use discrete latent variable models, allowing the models to capture the inner meanings/representations of the data better. Moreover, if one wants to work with the <u>real-world</u> data using latent variable models, they probably will confront some <u>assumption fails due to the discontinuoity of the data</u> and change their perception to the discrete latent variables realm.
 
+
+
+<br>
+<br>
 
 ## Stochastic Optimization
-Slide 5:<br>
 
+The terms "stochastic optimization" is used for the process of minimizing or maximizing an objective function in the case it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
+
+Recap from VAE content:<br>
+
+---
+
+We model our data as $p_{\theta}(x)$, where $x$ is the data and $\theta$ is the parameter of the model. We introduce a latent variable $z$, and also introduce a distribution $q(z|x)$ to the model, which leads to:
+
+$$
+p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z)$$
+$$ = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
+$$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
+$$
+
+We can pick a $q(z)$ that is easy to sample from and outputs related values to the true posterior $p(z|x)$. One of the ways to do this is making $q$ has a parameter $\phi$, and trying to optimize it, minimizing the KL divergence between $q(z|x)$ and $p(z|x)$, which can be made by maximizing the ELBO (Evidence Lower Bound) objective function.<br>
+Roughly, the objective is to maximize the following function (maximizing the ELBO):
+
+$$
+\max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
+$$
+
+
+
+---
+<br>
+
+Now, we can consider the following objective:<br>
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 
-$$
-\max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
-$$
-
-$$
-p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z) = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z) = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
-$$
-
-
-Slide 6:<br>
-
-
-$$
-\max_{\phi} E_{q_{\phi}(z)}[f(z)]
-$$
+Here, if we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to get the gradient of the expectation w.r.t. $\theta$ :
 
 $$
 \max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
+
+We can derive:
 
 $$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
 
-
+And we can approximate this expectation by Monte Carlo sampling:
 
 $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
+
+<p style="font-size:19px">But, what if the assumptions above fails? (z is not continuous).</p>
+In this case, we can utilize the REINFORCE Method, explained in th next section.
+
+
+<br>
+<br>
 
 ## REINFORCE Method
 Slide 7, 8:<br>
@@ -135,6 +165,10 @@ $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabl
 
 
 
+
+
+<br>
+<br>
 
 ## Variational Learning of Latent Variable Models
 
@@ -177,6 +211,10 @@ $$x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)$$
 $$\nabla_{\theta} E_{q} [x^2] = \nabla_{\theta} E_{p} [(\theta + \epsilon)^2] = E_{p} [2(\theta + \epsilon)]$$
 
 
+
+<br>
+<br>
+
 ## Neural Variational Inference and Learning (NVIL)
 
 Slide 27:<br>
@@ -199,6 +237,10 @@ $$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\p
 
 
 
+
+<br>
+<br>
+
 ## Towards Reparameterized, Continuous Relaxations
 
 Slide 29:<br>
@@ -214,6 +256,10 @@ Slide 30:<br>
 $$g = \max \{y_1, y_2, \ldots, y_n\}$$
 
 $$F(g; \mu, \beta) = \exp \left( - \exp \left( - \frac{g - \mu}{\beta} \right) \right)$$
+
+
+<br>
+<br>
 
 ## Categorical Distributions and Gumbel-Softmax
 
@@ -241,6 +287,10 @@ $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
+
+<br>
+<br>
+
 ## Combinatorial, Discrete Objects:<br>
  Permutations
 
@@ -253,6 +303,10 @@ $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 
 
 
+
+
+<br>
+<br>
 
 ## Plackett-Luce (PL) Distribution
 
@@ -280,6 +334,10 @@ is the normalizing constant.
 
 
 
+
+<br>
+<br>
+
 ## Relaxing PL Distribution to Gumbel-PL
 
 Slide 38:<br>
@@ -298,21 +356,36 @@ $$\tilde{s}_i = g_i + \log s_i$$
 
 
 
+
+<br>
+<br>
+
 ## Summary and Conclusions
 
 
 
 
+## References
 
-
-
-
+<br>
+<br>
 
 ## References
 TODO: make the references appropriate <br>
+Example reference usage : [[1]](#1)
 <br>
 <br>
 <br>
-[1]: Discrete Latent Variable Models Francesco Bartolucci,1 Silvia Pandolfi,1 and Fulvia Pennoni2 - https://www.annualreviews.org/docserver/fulltext/statistics/9/1/annurev-statistics-040220-091910.pdf?expires=1715703760&id=id&accname=ar-240193&checksum=8413D1CC7F1ED750E3BD979D48DE1B52
 
 
+<a id="1">[1]</a> 
+Bartolucci, F., Pandolfi, S., & Pennoni, F. (2022). Discrete latent variable models. Annual Review of Statistics and Its Application, 9(1), 425–452. https://doi.org/10.1146/annurev-statistics-040220-091910
+
+<br>
+<br>
+
+### Notes:
+
+For the most of the content, slides from cs236 lecture in "Stanfor University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
+
+Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
