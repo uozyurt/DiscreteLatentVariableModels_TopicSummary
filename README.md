@@ -365,25 +365,21 @@ $$\tilde{s}_i = g_i + \log s_i$$
 
 
 
-
-
-
-
-
+## References
 
 <br>
 <br>
 
 ## References
 TODO: make the references appropriate <br>
+Example reference usage : [[1]](#1)
 <br>
 <br>
 <br>
-[1]: Discrete Latent Variable Models Francesco Bartolucci,1 Silvia Pandolfi,1 and Fulvia Pennoni2 - https://www.annualreviews.org/docserver/fulltext/statistics/9/1/annurev-statistics-040220-091910.pdf?expires=1715703760&id=id&accname=ar-240193&checksum=8413D1CC7F1ED750E3BD979D48DE1B52
 
 
-
-
+<a id="1">[1]</a> 
+Bartolucci, F., Pandolfi, S., & Pennoni, F. (2022). Discrete latent variable models. Annual Review of Statistics and Its Application, 9(1), 425–452. https://doi.org/10.1146/annurev-statistics-040220-091910
 
 <br>
 <br>
