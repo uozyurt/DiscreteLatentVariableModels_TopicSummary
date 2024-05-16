@@ -1,4 +1,4 @@
-# <a href="[http//www.google.com](https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796)"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
 # <p style="text-align:center">Discrete Latent Variable Models</p>
 
@@ -137,6 +137,10 @@ In this case, we can utilize the REINFORCE Method, explained in th next section.
 <br>
 
 ## REINFORCE Method
+
+The name "REINFORCE" comes from : <br>
+<b>RE</b>ward <b>I</b>ncrement = <b>N</b>on-negative <b>F</b>actor × <b>O</b>ffset <b>R</b>einforcement × <b>C</b>haracteristic <b>E</b>ligibility
+
 Slide 7, 8:<br>
 
 
@@ -371,21 +375,78 @@ $$\tilde{s}_i = g_i + \log s_i$$
 <br>
 
 ## References
+Example citation generator:<br>
+https://www.scribbr.com/citation/generator/ <br> <br>
 TODO: make the references appropriate <br>
-Example reference usage : [[1]](#1)
+Example reference usage : [[5]](#5) <br>
+Example reference usage : ([Yigit, 2022](#6)) <br>
+Example reference usage : ([Ozyurt, 2023](#2))
 <br>
 <br>
 <br>
 
 
 <a id="1">[1]</a> 
-Bartolucci, F., Pandolfi, S., & Pennoni, F. (2022). Discrete latent variable models. Annual Review of Statistics and Its Application, 9(1), 425–452. https://doi.org/10.1146/annurev-statistics-040220-091910
+Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. Machine Learning, 8(3–4), 229–256. https://doi.org/10.1007/bf00992696
+
+
+
+<br>
+
+<a id="2">[2]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="3">[3]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="4">[4]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="5">[5]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="6">[6]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="7">[7]</a> 
+FILLER
+
+
+
+<br>
+
+<a id="8">[8]</a> 
+FILLER
+
+
+
+
 
 <br>
 <br>
 
-### Notes:
+### Additional Notes:
 
-For the most of the content, slides from cs236 lecture in "Stanfor University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
+* For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
-Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
+* Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
