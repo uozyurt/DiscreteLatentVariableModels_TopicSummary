@@ -130,7 +130,7 @@ $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
 
 <p style="font-size:19px">But, what if the assumptions above fails? (z is not continuous).</p>
-In this case, we can utilize the REINFORME Method, explained in th next section.
+In this case, we can utilize the REINFORCE Method, explained in th next section.
 
 
 <br>
