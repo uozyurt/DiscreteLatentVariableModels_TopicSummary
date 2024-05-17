@@ -324,22 +324,36 @@ Note that the mean is not equal to $\mu$. Actually, when the calculations are do
 
 ## Categorical Distributions and Gumbel-Softmax
 
-Slide 31:<br>
+Categorical Distributions represents the discrete probability distribution of a random variable. It has a specific probability assigned to each distinct category.<br>
+
+We show a categorical distribution $P$ with $K$ categories as:<br>
+
+$$P(X=k) = \pi_k$$
+
+where $\pi_k$ is the probability of the $k^{th}$ category, and sum of all $\pi_k$ is 1.<br>
+
+In this conditions, ve can respesent $z$ as a one-hot vector, where $z = \{\pi_1, \pi_2, ..., \pi_K\}$. <br>
+
+Now, we can apply a calculation known as the Gumbel-Max trick [[4](#4),[5](#5)], which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
+
+Here, $g_i$ is a Gumbel random variable sampled from the standard Gumbel distribution ($\mu = 0, \beta = 1$), and $\log \pi_i$ is the log probability of the $i^{th}$ category. <br>
+
+TODO: continute to this part
 
 Slide 32:<br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
 
-$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
 
 Slide 33:<br>
 
 
-$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
 
 Slide 35:<br>
 
@@ -465,21 +479,21 @@ Maddison, C. J., Tarlow, D., & Minka, T. (2014, October 31). A* sampling. arXiv.
 <br>
 
 <a id="4">[4]</a> 
-Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
+Maddison, C. J., Tarlow, D., & Minka, T. (2014c, October 31). A* sampling. arXiv.org. https://arxiv.org/abs/1411.0030
 
 
 
 <br>
 
 <a id="5">[5]</a> 
-FILLER
+Gumbel, E. J. (1954). Statistical theory of extreme valuse and some practical applications. Nat. Bur. Standards Appl. Math. Ser. 33.
 
 
 
 <br>
 
 <a id="6">[6]</a> 
-FILLER
+Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
 
 
 
