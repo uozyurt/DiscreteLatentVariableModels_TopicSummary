@@ -63,6 +63,8 @@ To illustrate the importance of discrete latent variables, consider several exam
     </figure>
 </div>
 
+<br>
+<br>
 
 Beyond these examples, there are numerous additional data domains where the data is inherently discrete or exhibits discrete characteristics. These domains include text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data, etc.
 
