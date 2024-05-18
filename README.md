@@ -81,13 +81,17 @@ In summary, the widespread occurrence of discrete data in various domains highli
 
 ## Stochastic Optimization
 
-The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way. Moreover, SGD (or mini-batch gradient descent) may reduce the chance of converging to an poor-performing local minimum by simply skipping it with the help of this stochasticity.<br>
+The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into GPU memory, or when the data is too complex to be processed in a deterministic way. Moreover, SGD (or mini-batch gradient descent) may reduce the chance of getting trapped into a poor-performing shallow local minimum by providing a better exploration of the optimization space with the help of this stochasticity.<br>
 
-Recap from VAE content:<br>
+In the VAE (Variational Autoencoder) context, this stochasticity is inherent in sampling from the latent space. The latent space is a high-dimensional space where the data is represented in a lower-dimensional form. The VAE model tries to learn the distribution of the data in this latent space, which also can be interpreted as learning the data manifold. Since the latent variables are sampled from a distribution, the optimization process becomes inherently stochastic. 
+
+
+Before diving into the details of the discrete latent variable model optimization methods, here is a brief overview of VAE optimization process:
+
 
 ---
 
-We model our data as $p_{\theta}(x)$, where $x$ is the data and $\theta$ is the parameter of the model. We introduce a latent variable $z$, and also introduce a distribution $q(z|x)$ to the model, which leads to:
+We model our data as $p_{\theta}(x)$, where $x$ is the data and $\theta$ is the parameter of the model. We introduce a latent variable $z$, and also introduce a distribution $q(z)$ to the model, which leads to:
 
 $$
 p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z)$$
@@ -95,7 +99,7 @@ $$ = \sum_{z \in {Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
 $$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
-We can pick a $q(z)$ that is easy to sample from and outputs values close to the true posterior $p(z|x)$. One way to do this is by making $q$ have a parameter $\phi$, and trying to optimize it by minimizing the KL divergence between $q(z|x)$ and $p(z|x), which can be done by maximizing the ELBO (Evidence Lower Bound) objective function. <br>
+We can pick a $q(z)$ that is easy to sample from and outputs values close to the true posterior $p(z|x)$. One way to do this is by making $q$ have a parameter $\phi$, and trying to optimize it by minimizing the KL divergence between $q(z|x)$ and $p(z|x)$, which can be done by maximizing the ELBO (Evidence Lower Bound) objective function. <br>
 Roughly, the objective is to maximize the following function (maximizing the ELBO):
 
 $$
@@ -121,7 +125,7 @@ $$
 
 <div style="text-align:center"> 
 
-We can try to find a way for the ELBO maximization objective below. 
+Trying to get the gradients to maximize the ELBO maximization objective below can not be directly achieved with the reparametrization trick. First, let us see if we can obtain the gradient with respect to $\theta$:
 
 </div>
 
@@ -154,10 +158,10 @@ $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 <br>
 
 
-The thing went well with the $\theta$, but we also have to consider the gradient with respect to $\phi$. If we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to achieve this goal.<br>
+Hence, it is not a problem to optimize the $\theta$, but we also have to consider the gradient with respect to $\phi$. If we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to achieve this goal.<br>
 
-<p style="font-size:19px">But, what if the assumptions above fails? (z is not continuous).</p>
-In this case, one of things that can be done is utilizing the REINFORCE Method, explained in the next section.
+<p style="font-size:19px">But, when any of the assumptions above fails (e.g. z is not continuous), directly using the reparametrization trick is not possible.</p>
+In this case, one of the things that can be done is utilizing the REINFORCE Method, explained in the next section.
 
 
 <br>
@@ -165,10 +169,10 @@ In this case, one of things that can be done is utilizing the REINFORCE Method, 
 
 ## REINFORCE Method
 
-REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights. It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
+REINFORCE is a Monte Carlo variation of a policy gradient method that is used to update a network's weights. It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for: <br>
 <b>RE</b>ward <b>I</b>ncrement = <b>N</b>on-negative <b>F</b>actor × <b>O</b>ffset <b>R</b>einforcement × <b>C</b>haracteristic <b>E</b>ligibility
 
-It's main goal is to optimize the expected reward, but it can be used in the problems where discrete latent variables or discrete actions exist. We are going to use the REINFORCE method to optimize the following objective function:
+Its primary goal is to optimize the expected reward, but it can be used in problems where discrete latent variables or discrete actions exist. We are going to use the REINFORCE method to optimize the following objective function:
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
@@ -180,7 +184,7 @@ But first, we need some mathematical tricks in the computation of the gradients.
 
 $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
 
-But with this form, we cannot calculate the gradient directly (since it is infeasible to calculate the expectation with all possible z values). Furthermore, we cannot estime the gradient by sampling z values from $q_{\phi}(z)$, because the expectation $E_{q_{\phi}(z)}$ is not in the gradient. So, we need to get it out. We can use the following trick to do this:
+However, with this form, we cannot calculate the gradient directly (since it is infeasible to calculate the expectation with all possible z values). Furthermore, we cannot estimate the gradient by sampling z values from $q_{\phi}(z)$ because the expectation $E_{q_{\phi}(z)}$ is inside of the gradient term. So, we need to get it out to approximate it with sampling. We can use the following trick to do this:
 
 
 $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
@@ -225,13 +229,13 @@ Now, we can rewrite the equation as an expectation:
 
 $$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
-By making these operations, we can now estimate the gradient by sampling z values from $q_{\phi}(z)$, taking the gradient of the log-probability of the z values, and multiplying it with the function value of z. This is the main idea of the REINFORCE method.<br>
+By making these operations, we can now estimate the gradient by sampling z values from $q_{\phi}(z)$, taking the gradient of the log probability of the z values, and multiplying it with the function value of z. This is the main idea of the REINFORCE method.<br>
 
-We are able to sampke $K$ times from $q_{\phi}(z)$, and estimate the gradient as:
+We are able to sample $K$ times from $q_{\phi}(z)$, and estimate the gradient as:
 
 $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
 
-This form can be interpreted as a gradient update, weighted in a way which maximizes the expected reward.
+This form can be interpreted as a gradient update, weighted in a way that maximizes the expected reward.
 
 
 ## Variational Learning of Latent Variable Models
@@ -309,7 +313,7 @@ $$
 \nabla_{\theta} E_{q} x^2 = \nabla_{\theta} E_{p} (\theta + \epsilon)^2 = E_{p} 2(\theta + \epsilon)
 $$
 
-However, as previously discussed, the reparameterization trick cannot be applied to discrete latent variables. While REINFORCE offers a method for gradient estimation with discrete variables, its high variance presents challenges for efficient optimization. To address this issue, strategies involving control variates will be discussed in the following section.
+However, as previously discussed, the reparameterization trick cannot be applied to discrete latent variables. While REINFORCE offers a method for gradient estimation with discrete variables, its high variance presents challenges for efficient optimization. Strategies involving control variates will be discussed in the following section to address this issue.
 
 ## Neural Variational Inference and Learning (NVIL)
 
@@ -383,9 +387,9 @@ The Neural Variational Inference and Learning (NVIL) method significantly enhanc
 
 ## Towards Reparameterized, Continuous Relaxations
 
-The term "continuos relaxation" is a technique to approximate the discrete variables with continuous variables. Since we have discrete latent variables and cannot use the reparametrization technique directly, and we have high variance in the REINFORCE method if we do not meticulously adjust the control variates, it is a plausible choice to go with the continuous relaxation to utilize the reparametrization trick. <br>
+The term "continuous relaxation" is a technique to approximate the discrete variables with continuous variables. Since we have discrete latent variables and cannot use the reparametrization technique directly, and we have high variance in the REINFORCE method if we do not meticulously adjust the control variates, it is a plausible choice to go with the continuous relaxation to utilize the reparametrization trick. <br>
 
-To get a continuous relaxation, there is a distribution utilized for this purpose. It is called "Gumbel" distribution, and it is useful in representing the extreme events.<br>
+To get a continuous relaxation, there is a distribution utilized for this purpose. It is called "Gumbel" distribution, and it is useful in representing extreme events.<br>
 
 The CDF of the Gumbel distribution is:
 
@@ -403,7 +407,7 @@ If we choose the Gumbel distribution to be standard ($\mu = 0$ and $\beta = 1$),
 $$G(x) = e^{-e^{-x}}$$
 
 
-Here are the example of the Gumbel distribution PDF visualizations for a better understanding:
+Here are the examples of the Gumbel distribution PDF visualizations for a better understanding:
 
 <div style="text-align: center;">
     <figure>
@@ -423,7 +427,7 @@ Note that the mean is not equal to $\mu$. Actually, when the calculations are do
 
 ## Categorical Distributions and Gumbel-Softmax
 
-Categorical Distributions represents the discrete probability distribution of a random variable. It has a specific probability assigned to each distinct category.<br>
+Categorical Distributions represent the discrete probability distribution of a random variable. It has a specific probability assigned to each distinct category.<br>
 
 We show a categorical distribution $P$ with $K$ categories as:<br>
 
@@ -470,15 +474,15 @@ When the temperature parameter is high, the distribution is more uniform, and wh
 <br>
 <br>
 
-To summarize what we have achieved by Gumbel-Softmax trick: <br>
+To summarize what we have achieved by applying the Gumbel-Softmax trick: <br>
 <br>
 
 
-We normally have the objective:
+We normally have the following objective:
 $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
 <br>
 
-And now, we change $z$ to $\hat{z}$, where $\hat{z}$ is the Gumbel-Softmax sample. We can now write the objective as:
+And now, we change $z$ to $\hat{z}$, where $\hat{z}$ is the Gumbel-Softmax sample. We can now write the objective as follows:
 
 $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
@@ -505,7 +509,7 @@ where $q_{\phi}(\mathbf{z})$ is a distribution over $k$-dimensional permutations
 
 ### Plackett-Luce (PL) Distribution
 
-The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations ${S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
+The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields, such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations ${S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
 
 This process continues sequentially, sampling $z_2, z_3, \ldots, z_k$ without replacement. The probability density function (PDF) for the PL distribution is given by:
 
@@ -530,7 +534,7 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption><a href="#Fig7">[Fig7]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
+    <figcaption><a href="#Fig7">[Fig7]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick, and other methods </figcaption>
     </figure>
 </div>
 
