@@ -406,73 +406,36 @@ $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 <br>
 
 ## Combinatorial, Discrete Objects:<br>
- Permutations
 
-Slide 36:<br>
+### Permutations
 
+In the realm of unsupervised learning, discovering rankings and matchings often necessitates the representation of data as permutations. A $k$-dimensional permutation $\mathbf{z}$ is a ranked list of $k$ indices from the set $\{1, 2, \ldots, k\}$. When dealing with such permutations, we frequently encounter stochastic optimization problems of the form:
 
-$$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
+$$\max_{\phi} \mathbb{E}_{q_{\phi}(\mathbf{z})}[f(\mathbf{z})], $$
 
+where $q_{\phi}(\mathbf{z})$ is a distribution over $k$-dimensional permutations. One straightforward approach to handle this problem is to treat each permutation as a distinct category, such as relaxing the categorical distribution to a Gumbel-Softmax distribution. However, this method quickly becomes infeasible due to the combinatorial explosion; the number of possible $k$-dimensional permutations is $k!$. The Gumbel-Softmax does not scale well for such a large number of categories, making it unsuitable for practical applications involving large $k$.
 
+### Plackett-Luce (PL) Distribution
 
+The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations $\mathcal{S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
 
-
-
-
-<br>
-<br>
-
-## Plackett-Luce (PL) Distribution
-
-Slide 37:<br>
+This process continues sequentially, sampling $z_2, z_3, \ldots, z_k$ without replacement. The probability density function (PDF) for the PL distribution is given by:
 
 
-$$p(z_1 = i) \propto s_i$$
-
-TODO: Fix the equation below (sum signs fails to render properly only in the github)<br>
-
-$$
-q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}
-$$
+$$ q_{\mathbf{s}}(\mathbf{z}) = \frac{s_{z_1}}{Z} \cdot \frac{s_{z_2}}{Z - s_{z_1}} \cdot \frac{s_{z_3}}{Z - \sum_{i=1}^{2}s_{z_i}} \cdots \frac{s_{z_k}}{Z - \sum_{i=1}^{k-1}s_{z_i}}, $$
 
 where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
 
-One way to fix it is below, but it is not a good solution:<br>
+### Relaxing PL Distribution to Gumbel-PL
 
-![Equation](https://latex.codecogs.com/svg.latex?q_s(z)=\frac{s_{z1}}{Z}\frac{s_{z2}}{Z-s_{z1}}\frac{s_{z3}}{Z-\sum_{i=1}^{2}s_{zi}}\cdots\frac{s_{zk}}{Z-\sum_{i=1}^{k-1}s_{zi}})
+To overcome the non-differentiability of the PL distribution, we can employ a reparameterization technique using Gumbel noise. The Gumbel-PL reparameterized sampler involves adding i.i.d. standard Gumbel noise $g_1, g_2, \ldots, g_k$ to the logarithms of the scores $\log s_1, \log s_2, \ldots, \log s_k$. The perturbed log-scores are then given by:
+$$
+\tilde{s}_i = g_i + \log s_i. 
+$$
+The permutation $\mathbf{z}$ is determined by sorting the Gumbel-perturbed log-scores $\tilde{s}_1, \tilde{s}_2, \ldots, \tilde{s}_k$. The challenge here is that the sorting operation is non-differentiable. However, recent advancements propose using differentiable relaxations to approximate the sorting process. One such method is described in the paper "Stochastic Optimization for Sorting Networks via Continuous Relaxations," which provides techniques to make the sorting operation amenable to gradient-based optimization.
 
+In summary, by reparameterizing the PL distribution with Gumbel noise and utilizing differentiable relaxations for sorting, we can effectively address the combinatorial challenges and leverage gradient-based methods for optimization in permutation-based models.
 
-
-where ![Equation](https://latex.codecogs.com/svg.latex?Z=\sum_{i=1}^{k}s_i)
-is the normalizing constant.
-
-
-
-
-<br>
-<br>
-
-## Relaxing PL Distribution to Gumbel-PL
-
-Slide 38:<br>
-
-
-
-$$\tilde{s}_i = g_i + \log s_i$$
-
-
-
-
-
-
-
-
-
-
-
-
-<br>
-<br>
 
 ## Summary and Conclusions
 
