@@ -204,6 +204,7 @@ While this framework works well for continuous latent variables, handling discre
 
 
 The ELBO can be expressed as:
+
 $$ 
 \nabla 
 $$
