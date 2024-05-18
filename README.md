@@ -1,14 +1,14 @@
-# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="align:center">METU CENG 796 / Spring 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
-# <p style="align:center">Discrete Latent Variable Models</p>
+# <p style="text-align:center">Discrete Latent Variable Models</p>
 
-## <p style="align:center">Topic Summary</p>
+## <p style="text-align:center">Topic Summary</p>
 
 
-#### <p style="align:center">Topic Summary Authors</p>
+#### <p style="text-align:center">Topic Summary Authors</p>
 
-### <p style="align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
-### <p style="align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
+### <p style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
+### <p style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
 
 
 
@@ -41,7 +41,7 @@ Discrete latent variables are hidden variables in models that take on a finite s
 The most compelling answer to the question "Why should we use them?" arises from real-world data representations. One can simply observe how data is represented in the examples below:
 
 
-<div style="align: center;">
+<div style="text-align: center;">
     <figure>
     <img src="figures/A-human-DNA-and-Part-of-DNA-sequence-28-29.jpg" alt="DNA Sequence">
     <figcaption><br><a href="#Fig1">[Fig1]</a>. DNA sequence data representation </figcaption>
@@ -50,7 +50,7 @@ The most compelling answer to the question "Why should we use them?" arises from
 
 <br>
 
-<div style="align: center;">
+<div style="text-align: center;">
     <figure>
     <img src="figures/Screenshot from 2024-05-14 18-41-41.png" alt="Game state">
     <figcaption><br><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named sokoban</figcaption>
@@ -63,7 +63,7 @@ The most compelling answer to the question "Why should we use them?" arises from
 <br>
 
 TODO: ADD GRAPH FIGURE:
-<div style="align: center;">
+<div style="text-align: center;">
     <figure>
     <img src="" alt="Graph example">
     <figcaption>Fig 3. TODO: ADD EXPLANATION AND CITATION </figcaption>
@@ -112,28 +112,28 @@ $$
 <br>
 
 
-<p style="align:center"> Now, we can consider the following objective: </p>
+<p style="text-align:center"> Now, we can consider the following objective: </p>
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 <br>
 
-<p style="align:center"> We can try to find a way for the ELBO maximization objective below. </p>
+<p style="text-align:center"> We can try to find a way for the ELBO maximization objective below. </p>
 
 $$
 \max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
 <br>
 
-<p style="align:center"> We can get the gradient of the expectation with respect to $\theta$: </p>
+<p style="text-align:center"> We can get the gradient of the expectation with respect to $\theta$: </p>
 
 
 
 $$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
 <br>
 
-<p style="align:center"> And we can approximate this expectation by Monte Carlo sampling: </p>
+<p style="text-align:center"> And we can approximate this expectation by Monte Carlo sampling: </p>
 
 
 $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
@@ -175,14 +175,14 @@ $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
 
 <br>
 
-<p style="align:center"> Expand the expectation: </p>
+<p style="text-align:center"> Expand the expectation: </p>
 
 
 $$= \frac{\partial}{\partial \phi_{i}} \sum_{z} q_{\phi}(z) f(z)$$
 
 <br>
 
-<p style="align:center"> Take the derivative inside the sum: </p>
+<p style="text-align:center"> Take the derivative inside the sum: </p>
 
 
 
@@ -190,14 +190,14 @@ $$ = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
 <br>
 
-<p style="align:center"> Multiply and divide with q (no effect): </p>
+<p style="text-align:center"> Multiply and divide with q (no effect): </p>
 
 
 $$ = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 <br>
 
 
-<div style="align:center">
+<div style="text-align:center">
 
 Here is the important part. We have the log-derivative rule $\dfrac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} = \dfrac{1}{q_{\phi}(z)} \dfrac{\partial q_{\phi}(z)}{\partial \phi_{i}}$. So, we can rewrite the equation above as:
 
@@ -207,7 +207,7 @@ $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z
 
 <br>
 
-<p style="align:center"> Now, we can rewrite the equation as an expectation in its final form: </p>
+<p style="text-align:center"> Now, we can rewrite the equation as an expectation in its final form: </p>
 
 
 $$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
@@ -395,7 +395,7 @@ $$G(x) = e^{-e^{-x}}$$
 
 Here are the example of the Gumbel distribution PDF visualizations for a better understanding:
 
-<div style="align: center;">
+<div style="text-align: center;">
     <figure>
     <img src=figures/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values.png alt="Gumbel distribution PDF">
     <figcaption><br><a href="#Fig4">[Fig4]</a>. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here here) </figcaption>
@@ -489,7 +489,7 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 
 ## Summary and Conclusions
 
-<div style="align: center;">
+<div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
     <figcaption><br><a href="#Fig5">[Fig5]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
