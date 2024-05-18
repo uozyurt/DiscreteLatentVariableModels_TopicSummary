@@ -204,7 +204,7 @@ While this framework works well for continuous latent variables, handling discre
 
 
 The ELBO can be expressed as:
-
+$$ \nabla $$
 $$
 \mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
 $$
