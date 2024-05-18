@@ -92,7 +92,7 @@ We model our data as $p_{\theta}(x)$, where $x$ is the data and $\theta$ is the 
 
 $$
 p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z)$$
-$$ = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
+$$ = \sum_{z \in {Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
 $$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
@@ -195,7 +195,7 @@ Variational learning is a powerful technique in probabilistic modeling and Bayes
 The variational learning approach typically optimizes the Evidence Lower Bound (ELBO), defined as:
 
 $$
-\mathcal{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
+{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
 $$
 
 Maximizing the ELBO is equivalent to minimizing the KL divergence, thereby making $q(\mathbf{z}; \phi)$ a good approximation of $p(\mathbf{z}|\mathbf{x})$.
@@ -207,13 +207,13 @@ The ELBO can be expressed as:
 
 
 $$
-\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
+{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
 $$
 
 or
 
 $$
-\mathcal{L}(x; \theta, \phi) = {E}_\{ q_{\phi}(z|x) \}  \log p(z,x;\theta) - \log q_{\phi}(z|x)
+{L}(x; \theta, \phi) = {E}_\{ q_{\phi}(z|x) \}  \log p(z,x;\theta) - \log q_{\phi}(z|x)
 $$
 
 Here, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. To consider this, we define a function $f$ that includes $\phi$, $\theta$, $z$, and $x$. The objective function can be rewritten as:
@@ -256,7 +256,7 @@ $$
 Using the reparameterization trick reduces variance, leading to faster convergence:
 
 $$
-x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
+x = \theta + \epsilon, \quad \epsilon \sim {N}(0, 1)
 $$
 
 $$
@@ -272,7 +272,7 @@ Neural Variational Inference and Learning (NVIL) represents an advancement in va
 NVIL extends the traditional variational inference framework by employing neural networks to parameterize the variational distribution $q(\mathbf{z}; \phi)$. The ELBO remains the objective to be maximized:
 
 $$
-\mathcal{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right
+{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right
 $$
 
 For discrete latent variables, the REINFORCE algorithm is often used to estimate gradients. As noted, this approach suffers from high variance due to the stochastic nature of the samples and the variability in the log-likelihood ratio. NVIL addresses these issues using control variates, significantly reducing variance and enhancing convergence.
@@ -301,7 +301,7 @@ Control variates are auxiliary terms that help in reducing the variance of an es
    NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
 
    $$
-   \nabla_{\phi} \mathcal{L}(\phi) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
+   \nabla_{\phi} {L}(\phi) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
    $$
 
    A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
@@ -431,7 +431,7 @@ where $q_{\phi}(\mathbf{z})$ is a distribution over $k$-dimensional permutations
 
 ### Plackett-Luce (PL) Distribution
 
-The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations $\mathcal{S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
+The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations ${S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
 
 This process continues sequentially, sampling $z_2, z_3, \ldots, z_k$ without replacement. The probability density function (PDF) for the PL distribution is given by:
 
