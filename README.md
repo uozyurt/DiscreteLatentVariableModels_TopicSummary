@@ -441,26 +441,52 @@ $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 
 Here, $g_i$ is a Gumbel random variable sampled from the standard Gumbel distribution ($\mu = 0, \beta = 1$), and $\log \pi_i$ is the log probability of the $i^{th}$ category. <br>
 
-TODO: continute to this part
+Now, we can sample from a categorical distribution using the Gumbel-Max trick, but the sampling is not differentiable (since it uses the argmax function). To make it differentiable, we can use the Gumbel-Softmax trick, which replaces the argmax function with a softmax function, adding a temperature parameter $\tau$ to control the smoothness of the distribution: <br>
 
-Slide 32:<br>
-
-
-$$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
-
-$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
-
-Slide 33:<br>
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/gumbel_softmax.png alt="gumbel_softmax formula">
+    <figcaption><a href="#Fig6,7">[Fig6]</a>. Gumbel-Softmax formula </figcaption>
+    </figure>
+</div>
 
 
-$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
+In the formula above, $g_i$ is a Gumbel random variable, $\tau$ is the temperature parameter, and $x_i$ is the logits where $x_i = \log \pi_i$. <br>
 
-Slide 35:<br>
+Using the Gumbel-Softmax sampler (which is differentiable with respect to $\pi$), we can now use the reparameterization trick to optimize the parameters of the categorical distribution since we can satisfy the assumptions. <br>
+
+In the original Gumbel-Softmax paper, it is observed that the temperature parameter $\tau$ can be annealed during training to improve the convergence of the model. <br>
+
+The effect of the temperature parameter on the Gumbel-Softmax output is shown below: <br>
+
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/effect_of_temperature.png alt="effect of the temperature parameter">
+    <figcaption><a href="#Fig6,7">[Fig7]</a>. Effect of the temperature parameter in the Gumbe-Softmax output </figcaption>
+    </figure>
+</div>
+
+When the temperature parameter is high, the distribution is more uniform, and when it is low, the distribution is more peaked. More specifically, when $\tau$ approaches 0, the sampling process is equivalent to the argmax function, and when $\tau$ approaches infinity, the sampling process is equivalent to the uniform distribution. <br> 
+
+<br>
+<br>
+
+To summarize what we have achieved by Gumbel-Softmax trick: <br>
+<br>
 
 
+We normally have the objective:
 $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
+<br>
+
+And now, we change $z$ to $\hat{z}$, where $\hat{z}$ is the Gumbel-Softmax sample. We can now write the objective as:
 
 $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
+
+Using the Gumbel-Softmax trick ($\hat{z}$ value), the calculation of gradients in the backpropagation process is possible (softmax is differentiable), and the optimization of the parameters $\phi$ can be achieved. <br>
+
+Note that the $\phi$ contains $\pi$ values and $\tau$ value (as declared, $\tau$ can be explicitly controlled). <br>
+
 
 
 <br>
@@ -589,20 +615,30 @@ Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Scie
 
 
 <a id="Fig1">[Fig 1]</a>
-DNA sequence data representation: https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
+DNA sequence data representation: <br> 
+https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
 
 <a id="Fig2">[Fig 2]</a>
-Game state data representation: https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
+Game state data representation: <br> 
+https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
 
 <a id="Fig3">[Fig 3]</a>
+A network representation of social relationships among the 34 individuals in the karate club studied by Zachary: <br> 
 Zachary’s Karate Club graph: Zachary W. (1977). An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33, 452-473.
 
 <a id="Fig4">[Fig 4]</a>
-Gumbel Distribution Probability Distribution Function Visualization: https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
+Gumbel Distribution Probability Distribution Function Visualization: <br> 
+https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
 
 
 <a id="Fig5">[Fig 5]</a>
-Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
+Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: <br> 
+https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
+
+<a id="Fig6,7">[Fig 6,7]</a>
+Gumbel-Softmax formula: <br> 
+Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
+
 
 
 <br>
