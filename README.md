@@ -81,7 +81,7 @@ In summary, the widespread occurrence of discrete data in various domains highli
 
 ## Stochastic Optimization
 
-The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
+The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way. Moreover, SGD (or mini-batch gradient descent) may reduce the chance of converging to an poor-performing local minimum by simply skipping it with the help of this stochasticity.<br>
 
 Recap from VAE content:<br>
 
@@ -233,7 +233,6 @@ $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabl
 
 This form can be interpreted as a gradient update, weighted in a way which maximizes the expected reward.
 
-TODO: add citations and more comments
 
 ## Variational Learning of Latent Variable Models
 
@@ -646,8 +645,7 @@ Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization wi
 
 ### Additional Notes:
 
-TODO: Check if the source below citeable
 
-* For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
+* For the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
 * Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
