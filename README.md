@@ -38,9 +38,12 @@ Discrete latent variables are hidden variables within models that can take on a 
 
 To illustrate the importance of discrete latent variables, consider several examples:
 
+<br>
+
 <div style="text-align: center;">
     <figure>
     <img src="figures/A-human-DNA-and-Part-of-DNA-sequence-28-29.jpg" alt="DNA Sequence">
+    <br>
     <figcaption><a href="#Fig1">[Fig1]</a>. DNA sequence data representation </figcaption>
     </figure>
 </div>
