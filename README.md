@@ -34,10 +34,9 @@
 
 ## Why Discrete Latent Variables?
 
-Discrete latent variables are hidden variables in models that take on a finite set of distinct values. They are crucial in decision-making processes and learning structures because they help capture the inherent discreteness in various types of data and systems. <br>
+Discrete latent variables are hidden variables within models that can take on a finite set of distinct values. These variables play a crucial role in decision-making processes and learning structures because they effectively capture the inherent discreteness present in various types of data and systems. This capability is particularly important in real-world data representations, where discrete attributes are often prevalent.
 
-The most natural answer for the "Why should we use them?" question stems from the real-world data representations. One can simply observe how the “data” is represented in the examples below:
-
+To illustrate the importance of discrete latent variables, consider several examples:
 
 <div style="text-align: center;">
     <figure>
@@ -55,30 +54,22 @@ The most natural answer for the "Why should we use them?" question stems from th
     </figure>
 </div>
 
-
- 
-
 <br>
 
-TODO: ADD GRAPH FIGURE:
 <div style="text-align: center;">
     <figure>
-    <img src="" alt="Graph example">
-    <figcaption>Fig 3. TODO: ADD EXPLANATION AND CITATION </figcaption>
+    <img src="figures/karate-club.jpg" alt="DNA Sequence">
+    <figcaption><a href="#Fig1">[Fig1]</a>. A network representation of social relationships among the 34 individuals in the karate club studied by Zachary.n </figcaption>
     </figure>
 </div>
 
 
+Beyond these examples, there are numerous additional data domains where the data is inherently discrete or exhibits discrete characteristics. These domains include text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data, etc.
 
+The natural and abundant presence of discrete attributes in these data domains shifts the focus toward using discrete latent variable models. These models allow for better capture of the underlying meanings and representations of the data. Moreover, when working with real-world data, continuous latent variable models often face challenges due to the discontinuity of the data. This often necessitates a shift towards discrete latent variables to more accurately model the data and avoid assumption failures inherent in continuous representations.
 
+In summary, the widespread occurrence of discrete data in various domains highlights the necessity of discrete latent variable models. These models provide a more accurate and meaningful representation of the underlying data structures, making them indispensable for working with real-world data.
 
-In addition to the DNA sequence, game state and graph representation examples above, we have many additional data domains (e.g. text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data) where the data is/has inherently discrete representations.<br>
-
-This natural and abundant appearance of the discreteness shifts us to use discrete latent variable models, allowing the models to capture the inner meanings/representations of the data better. Moreover, if one wants to work with the <u>real-world</u> data using latent variable models, they probably will confront some <u>assumption fails due to the discontinuoity of the data</u> and change their perception to the discrete latent variables realm.
-
-
-
-<br>
 <br>
 
 ## Stochastic Optimization
