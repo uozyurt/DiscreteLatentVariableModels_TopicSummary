@@ -23,9 +23,7 @@
 5.  [Neural Variational Inference and Learning (NVIL)](#neural-variational-inference-and-learning-nvil)
 6.  [Towards Reparameterized, Continuous Relaxations](#towards-reparameterized-continuous-relaxations)
 7.  [Categorical Distributions and Gumbel-Softmax](#categorical-distributions-and-gumbel-softmax)
-8.  [Combinatorial, Discrete Objects: Permutations](#combinatorial-discrete-objects-permutations)
-9.  [Plackett-Luce (PL) Distribution](#plackett-luce-pl-distribution)
-10. [Relaxing PL Distribution to Gumbel-PL](#relaxing-pl-distribution-to-gumbel-pl)
+8.  [Combinatorial, Discrete Objects](#combinatorial-discrete-objects-permutations)
 11. [Summary and Conclusions](#summary-and-conclusions)
 12. [References](#references)
 
@@ -285,27 +283,27 @@ Control variates are auxiliary terms that help in reducing the variance of an es
 1. **Baseline Subtraction**:  
    The variance of the gradient estimator can be reduced by subtracting a baseline $b(x)$ from the objective function:
 
-   $
+   $$
    \nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $
+   $$
 
    The baseline $b(x)$ is ideally the expectation of $f$, which minimizes the variance of the gradient estimator without introducing bias.
 
 2. **Learned Baselines**:  
    Instead of a fixed baseline, NVIL often uses a neural network to learn an adaptive baseline $b_\psi(x)$:
 
-   $
+   $$
    \nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $
+   $$
 
    The parameters $\psi$ of the baseline network are optimized to minimize the variance of the gradient estimates.
 
 3. **Control Variate Networks**:  
    NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
 
-   $
+   $$
    \nabla_{\phi} L(\phi) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $
+   $$
 
    A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
 
@@ -521,18 +519,29 @@ Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization wi
 
 <br>
 
-<a id="7">[7]</a> 
-FILLER
+<a id="a">[a]</a> 
+Gadetsky, A., Struminsky, K., Robinson, C., Quadrianto, N., & Vetrov, D. (2020). Low-Variance Black-Box gradient estimates for the Plackett-Luce distribution. Proceedings of the . . . AAAI Conference on Artificial Intelligence, 34(06), 10126–10135. https://doi.org/10.1609/aaai.v34i06.6572
 
+<br>
+
+    
+<a id="b">[b]</a> 
+Oosterhuis, H. (2022). Computationally Efficient Optimization of Plackett-Luce Ranking Models for Relevance and Fairness (Extended Abstract). Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence. https://doi.org/10.24963/ijcai.2022/743
 
 
 <br>
 
-<a id="8">[8]</a> 
-FILLER
-
+<a id="c">[c]</a> 
+Richard S. Sutton and Andrew G. Barto. Reinforcement Learning: An Introduction; 2nd Edition. 2017.
 
 <br>
+
+<a id="d">[d]</a> 
+Mnih, A. &amp; Gregor, K.. (2014). Neural Variational Inference and Learning in Belief Networks. <i>Proceedings of the 31st International Conference on Machine Learning</i>, in <i>Proceedings of Machine Learning Research</i> 32(2):1791-1799 Available from https://proceedings.mlr.press/v32/mnih14.html.
+
+<br>
+<a id="e">[e]</a> 
+Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Science and Statistics). https://dl.acm.org/citation.cfm?id=1162264
 <br>
 
 ### References (Figures)
