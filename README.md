@@ -188,99 +188,152 @@ This form can be interpreted as a gradient update, weighted in a way which maxim
 
 TODO: add citations and more comments
 
-
-
-<br>
-<br>
-
 ## Variational Learning of Latent Variable Models
 
+Variational learning is a powerful technique in probabilistic modeling and Bayesian inference, providing a scalable alternative to traditional methods like Markov Chain Monte Carlo (MCMC). The core idea is to approximate complex, intractable posterior distributions $p(\mathbf{z}|\mathbf{x})$ with a simpler, parameterized family of distributions $q(\mathbf{z}; \phi)$. The parameters $\phi$ of the variational distribution are optimized to minimize the Kullback-Leibler (KL) divergence between $q(\mathbf{z}; \phi)$ and the true posterior $p(\mathbf{z}|\mathbf{x})$.
 
-TODO: ADD MORE COMMENTS AND CITATIONS
+The variational learning approach typically optimizes the Evidence Lower Bound (ELBO), defined as:
 
+$$
+\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
+$$
 
-Now, we want to work with the ELBO (Evidence Lower Bound) objective function, which is defined as:
+Maximizing the ELBO is equivalent to minimizing the KL divergence, thereby making $q(\mathbf{z}; \phi)$ a good approximation of $p(\mathbf{z}|\mathbf{x})$.
 
-
-$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
-$$= E_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
-
-As it can be observed, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. So, we have to consider a function $f$ which also includes the $\phi$ parameter (also the $\theta$ and $x$). So, instead of $E_{q_{\phi}(z)}[f(z)]$, the objective function can be rewritten as:
-
-$$E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)$$
-
-Now, we can re-write the REINFORCE formula to be used for this objective function:
-
-$$\nabla_{\phi} E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
-
-Here, this REINFORCE rule is more generic since $f$ is also dependent on the $\phi$ parameter. Now, we can construct a Monte Carlo estimation for the ELBO's gradient w.r.t. $\phi$, just as before.
-
-<br>
-<br>
-
-We have seen that the ELBO objective function can be optimized (maximized) using the REINFORCE method even when the latent variable $z$ is discrete. But, what are the downsides of this method? The main problem is the high variance in the gradient estimates, which can lead to slow convergence. 
+While this framework works well for continuous latent variables, handling discrete latent variables introduces significant challenges. Discrete variables do not allow for the straightforward application of gradient-based optimization techniques due to their non-differentiable nature. This makes the direct computation of gradients of the ELBO with respect to the parameters $\phi$ infeasible. Consequently, alternative methods, such as the REINFORCE algorithm, are employed to estimate these gradients.
 
 
-$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
-
-For the REINFORCE rule above (or the more generic version for the ELBO, which includes $\phi$, $\theta$ and $x$), the variance can be compared with the variance of the reparameterization trick.<br>
+The ELBO can be expressed as:
 
 
-$$\nabla_{\theta} E_{q} [x^2]$$
+$$
+\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
+$$
 
-$$q_{\theta}(x) = N(\theta, 1)$$
+or
 
-Here, $q_{\theta}(x)$ is a Gaussian distribution parameterized by $\theta$. Calculating the variance:
+$$
+\mathcal{L}(x; \theta, \phi) = \mathbb{E}_\{ q_{\phi}(z|x) \} \[ \log p(z,x;\theta) - \log q_{\phi}(z|x) \]
+$$
 
-$$E_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = E_{q} [x^2 (x - \theta)]$$
+Here, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. To consider this, we define a function $f$ that includes $\phi$, $\theta$, $z$, and $x$. The objective function can be rewritten as:
 
-However, in the reparameterization trick, the variance is much lower, which leads to faster convergence:
+$$
+\mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)
+$$
 
-$$x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)$$
+The REINFORCE rule for this objective function is:
 
-$$\nabla_{\theta} E_{q} [x^2] = \nabla_{\theta} E_{p} [(\theta + \epsilon)^2] = E_{p} [2(\theta + \epsilon)]$$
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)\]
+$$
+
+This rule is more generic since $f$ also depends on the $\phi$ parameter. To estimate the ELBO's gradient with respect to $\phi$ using Monte Carlo, we have:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} \[f(z)\] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)
+$$
 
 
-But still, we cannot use the reparameterization trick for discrete latent variables. The question is: "Are there any other methods to reduce the variance in the gradient estimates for discrete latent variables?" The answer is "Yes", and we are going to discuss the "Gumbel-Softmax" method in the next sections.
+The REINFORCE rule is viable for gradient estimation with discrete variables but suffers from high variance in gradient estimates, leading to slow convergence. The variance issue arises due to the stochastic nature of the samples used in Monte Carlo estimates. Each sample $\mathbf{z}^{(i)}$ can lead to a significantly different value of the log-likelihood ratio $\log p(\mathbf{x}, \mathbf{z}^{(i)}) - \log q(\mathbf{z}^{(i)}; \phi)$, resulting in large fluctuations in gradient estimates. This high variance can be attributed to:
+
+1. **Inherent stochasticity**: Discrete latent variables amplify the variance in gradient estimates.
+2. **Log-likelihood ratio**: The term $\log p(\mathbf{x}, \mathbf{z}^{(i)}) - \log q(\mathbf{z}^{(i)}; \phi)$ can vary widely, especially when $q(\mathbf{z}; \phi)$ is a poor approximation of $p(\mathbf{z}|\mathbf{x})$.
 
 
-<div style="text-align: center;">
-    <figure>
-    <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
-    </figure>
-</div>
+For example, in a Gaussian distribution parameterized by $\theta$:
 
-<br>
-<br>
+$$
+\nabla_{\theta} \mathbb{E}_{q} [x^2]
+$$
+
+with $q_{\theta}(x) = N(\theta, 1)$, the variance is:
+
+$$
+\mathbb{E}_{q} \[x^2 \nabla_{\theta} \log q_{\theta}(x)\] = \mathbb{E}_{q} \[x^2 (x - \theta)\]
+$$
+
+Using the reparameterization trick reduces variance, leading to faster convergence:
+
+$$
+x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
+$$
+
+$$
+\nabla_{\theta} \mathbb{E}_{q} \[x^2\] = \nabla_{\theta} \mathbb{E}_{p} \[(\theta + \epsilon)^2\] = \mathbb{E}_{p} \[2(\theta + \epsilon)\]
+$$
+
+However, as previously discussed, the reparameterization trick cannot be applied to discrete latent variables. While REINFORCE offers a method for gradient estimation with discrete variables, its high variance presents challenges for efficient optimization. To address this issue, strategies involving control variates will be discussed in the following section.
 
 ## Neural Variational Inference and Learning (NVIL)
 
-TODO: I SKIPPED HERE. We have to talk about the control variates if we are going to talk about NVIL. <br>
+Neural Variational Inference and Learning (NVIL) represents an advancement in variational inference, particularly tailored for belief networks with discrete latent variables. The high variance in gradient estimates is mitigated in NVIL through the use of control variates.
 
-Slide 27:<br>
+NVIL extends the traditional variational inference framework by employing neural networks to parameterize the variational distribution $q(\mathbf{z}; \phi)$. The ELBO remains the objective to be maximized:
 
+$$
+\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left\[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right\]
+$$
 
-$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
+For discrete latent variables, the REINFORCE algorithm is often used to estimate gradients. As noted, this approach suffers from high variance due to the stochastic nature of the samples and the variability in the log-likelihood ratio. NVIL addresses these issues using control variates, significantly reducing variance and enhancing convergence.
 
-$$= E_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
+Control variates are auxiliary terms that help in reducing the variance of an estimator. In the context of NVIL, these are employed to stabilize the gradient estimates of the ELBO.
 
-$$:<br>
-= E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
+1. **Baseline Subtraction**:  
+   The variance of the gradient estimator can be reduced by subtracting a baseline $b(x)$ from the objective function:
 
-Slide 28:<br>
+   $$
+   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+   $$
 
+   The baseline $b(x)$ is ideally the expectation of $f$, which minimizes the variance of the gradient estimator without introducing bias.
 
-$$\mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
+2. **Learned Baselines**:  
+   Instead of a fixed baseline, NVIL often uses a neural network to learn an adaptive baseline $b_\psi(x)$:
 
-$$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - h_{\psi}(x) - B) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
+   $$
+   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+   $$
 
+   The parameters $\psi$ of the baseline network are optimized to minimize the variance of the gradient estimates.
 
+3. **Control Variate Networks**:  
+   NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
 
+   $$
+   \nabla_{\phi} \mathcal{L}(\phi) = \mathbb{E}_{q_{\phi}(z|x)} \left\[ (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x) \right\]
+   $$
 
+   A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
 
-<br>
-<br>
+To illustrate the variance reduction, let's compare the REINFORCE rule with and without control variates. The REINFORCE gradient estimate is:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x)\]
+$$
+
+In contrast, with a control variate $c(z)$:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+$$
+
+The variance reduction is mathematically evident if $c(z)$ is a good approximation of $f(\phi, \theta, z, x)$, as it reduces the magnitude of $f(\phi, \theta, z, x) - c(z)$.
+
+Control variates help in reducing variance by effectively isolating the noise component of the gradient estimate. By introducing a term $c(z)$ that approximates the expected value of the objective function, the variability around the mean is reduced. This stabilization allows for more accurate and consistent gradient estimates. Mathematically, this is seen in the term $f(\phi, \theta, z, x) - c(z)$, where $c(z)$ captures much of the fluctuation, leading to a smaller and more stable difference, and thus lower variance.
+
+While NVIL provides significant improvements, it also has limitations:
+
+1. **Complexity**: The introduction of control variate networks and learned baselines increases the computational and implementation complexity. Training additional neural networks alongside the main model requires more resources.
+
+2. **Hyperparameter Sensitivity**: NVIL involves additional hyperparameters, such as those for the control variate networks, which can complicate the optimization process. Finding the right set of hyperparameters can be challenging and may require extensive tuning.
+
+3. **Scalability**: For very large and complex models, the effectiveness of control variates can diminish, as the approximation $c(z)$ might not capture all the variance, especially in high-dimensional spaces.
+
+4. **Dependence on Quality of Control Variates**: The effectiveness of variance reduction heavily relies on the quality of the control variate. If $c(z)$ poorly approximates the true expectation, the variance reduction may be minimal.
+
+The Neural Variational Inference and Learning (NVIL) method significantly enhances the efficiency of variational learning for belief networks with discrete latent variables. By incorporating control variates, NVIL addresses the high variance in gradient estimates, a critical issue in traditional variational learning methods. This results in more stable and faster convergence, making NVIL a powerful approach for complex probabilistic modeling and Bayesian inference. However, the added complexity, hyperparameter sensitivity, and scalability issues necessitate the exploration of more robust and effective algorithms for learning discrete latent variables. In the following sections, we will investigate continuous relaxations of discrete random variables as a widely used alternative.
+
 
 ## Towards Reparameterized, Continuous Relaxations
 
@@ -367,77 +420,45 @@ $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 <br>
 
 ## Combinatorial, Discrete Objects:<br>
- Permutations
 
-Slide 36:<br>
+### Permutations
 
+In the realm of unsupervised learning, discovering rankings and matchings often necessitates the representation of data as permutations. A $k$-dimensional permutation $\mathbf{z}$ is a ranked list of $k$ indices from the set $\{1, 2, \ldots, k\}$. When dealing with such permutations, we frequently encounter stochastic optimization problems of the form:
 
-$$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
+$$\max_{\phi} \mathbb{E}_{q_{\phi}(\mathbf{z})}[f(\mathbf{z})], $$
 
+where $q_{\phi}(\mathbf{z})$ is a distribution over $k$-dimensional permutations. One straightforward approach to handle this problem is to treat each permutation as a distinct category, such as relaxing the categorical distribution to a Gumbel-Softmax distribution. However, this method quickly becomes infeasible due to the combinatorial explosion; the number of possible $k$-dimensional permutations is $k!$. The Gumbel-Softmax does not scale well for such a large number of categories, making it unsuitable for practical applications involving large $k$.
 
+### Plackett-Luce (PL) Distribution
 
+The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations $\mathcal{S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
 
-
-
-
-<br>
-<br>
-
-## Plackett-Luce (PL) Distribution
-
-Slide 37:<br>
+This process continues sequentially, sampling $z_2, z_3, \ldots, z_k$ without replacement. The probability density function (PDF) for the PL distribution is given by:
 
 
-$$p(z_1 = i) \propto s_i$$
-
-TODO: Fix the equation below (sum signs fails to render properly only in the github)<br>
-
-$$
-q_s(z) = \frac{s_{z1}}{Z} \frac{s_{z2}}{Z - s_{z1}} \frac{s_{z3}}{Z - \sum_{i=1}^{2}s_{zi}} \cdots \frac{s_{zk}}{Z - \sum_{i=1}^{k-1}s_{zi}}
-$$
+$$ q_{\mathbf{s}}(\mathbf{z}) = \frac{s_{z_1}}{Z} \cdot \frac{s_{z_2}}{Z - s_{z_1}} \cdot \frac{s_{z_3}}{Z - \sum_{i=1}^{2}s_{z_i}} \cdots \frac{s_{z_k}}{Z - \sum_{i=1}^{k-1}s_{z_i}}, $$
 
 where $Z = \sum_{i=1}^{k} s_i$ is the normalizing constant.
 
-One way to fix it is below, but it is not a good solution:<br>
+### Relaxing PL Distribution to Gumbel-PL
 
-![Equation](https://latex.codecogs.com/svg.latex?q_s(z)=\frac{s_{z1}}{Z}\frac{s_{z2}}{Z-s_{z1}}\frac{s_{z3}}{Z-\sum_{i=1}^{2}s_{zi}}\cdots\frac{s_{zk}}{Z-\sum_{i=1}^{k-1}s_{zi}})
+To overcome the non-differentiability of the PL distribution, we can employ a reparameterization technique using Gumbel noise. The Gumbel-PL reparameterized sampler involves adding i.i.d. standard Gumbel noise $g_1, g_2, \ldots, g_k$ to the logarithms of the scores $\log s_1, \log s_2, \ldots, \log s_k$. The perturbed log-scores are then given by:
+$$
+\tilde{s}_i = g_i + \log s_i. 
+$$
+The permutation $\mathbf{z}$ is determined by sorting the Gumbel-perturbed log-scores $\tilde{s}_1, \tilde{s}_2, \ldots, \tilde{s}_k$. The challenge here is that the sorting operation is non-differentiable. However, recent advancements propose using differentiable relaxations to approximate the sorting process. One such method is described in the paper "Stochastic Optimization for Sorting Networks via Continuous Relaxations," which provides techniques to make the sorting operation amenable to gradient-based optimization.
 
+In summary, by reparameterizing the PL distribution with Gumbel noise and utilizing differentiable relaxations for sorting, we can effectively address the combinatorial challenges and leverage gradient-based methods for optimization in permutation-based models.
 
-
-where ![Equation](https://latex.codecogs.com/svg.latex?Z=\sum_{i=1}^{k}s_i)
-is the normalizing constant.
-
-
-
-
-<br>
-<br>
-
-## Relaxing PL Distribution to Gumbel-PL
-
-Slide 38:<br>
-
-
-
-$$\tilde{s}_i = g_i + \log s_i$$
-
-
-
-
-
-
-
-
-
-
-
-
-<br>
-<br>
 
 ## Summary and Conclusions
 
-
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/comparison_of_techniques.png alt="technique comparisons">
+    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
+    </figure>
+</div>
 
 
 ## References
