@@ -1,14 +1,14 @@
-# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><div style="text-align:center">METU CENG 796 / Spring 24</div></a>
 
-# <p style="text-align:center">Discrete Latent Variable Models</p>
+# <div style="text-align:center">Discrete Latent Variable Models</div>
 
-## <p style="text-align:center">Topic Summary</p>
+## <div style="text-align:center">Topic Summary</div>
 
 
-#### <p style="text-align:center">Topic Summary Authors</p>
+#### <div style="text-align:center">Topic Summary Authors</div>
 
-### <p style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
-### <p style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
+### <div style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</div>
+### <div style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</div>
 
 
 
@@ -23,7 +23,9 @@
 5.  [Neural Variational Inference and Learning (NVIL)](#neural-variational-inference-and-learning-nvil)
 6.  [Towards Reparameterized, Continuous Relaxations](#towards-reparameterized-continuous-relaxations)
 7.  [Categorical Distributions and Gumbel-Softmax](#categorical-distributions-and-gumbel-softmax)
-8.  [Combinatorial, Discrete Objects](#combinatorial-discrete-objects-permutations)
+8.  [Permutations](#permutations)
+9.  [Plackett-Luce (PL) Distribution](#plackett-luce-pl-distribution)
+10. [Relaxing PL Distribution to Gumbel-PL](#relaxing-pl-distribution-to-gumbel-pl)
 11. [Summary and Conclusions](#summary-and-conclusions)
 12. [References](#references)
 
@@ -81,7 +83,7 @@ In summary, the widespread occurrence of discrete data in various domains highli
 
 ## Stochastic Optimization
 
-The terms "stochastic optimization" is used for the process of minimizing or maximizing an objective function in the case it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
+The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
 
 Recap from VAE content:<br>
 
@@ -95,7 +97,7 @@ $$ = \sum_{z \in {Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
 $$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
-We can pick a $q(z)$ that is easy to sample from and outputs related values to the true posterior $p(z|x)$. One of the ways to do this is making $q$ has a parameter $\phi$, and trying to optimize it, minimizing the KL divergence between $q(z|x)$ and $p(z|x)$, which can be made by maximizing the ELBO (Evidence Lower Bound) objective function.<br>
+We can pick a $q(z)$ that is easy to sample from and outputs values close to the true posterior $p(z|x)$. One way to do this is by making $q$ have a parameter $\phi$, and trying to optimize it by minimizing the KL divergence between $q(z|x)$ and $p(z|x), which can be done by maximizing the ELBO (Evidence Lower Bound) objective function. <br>
 Roughly, the objective is to maximize the following function (maximizing the ELBO):
 
 $$
@@ -107,29 +109,57 @@ $$
 ---
 <br>
 
-Now, we can consider the following objective:<br>
+
+<div style="text-align:center"> 
+
+Now, we can consider the following objective: 
+
+</div>
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
+<br>
 
-Here, if we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to get the gradient of the expectation w.r.t. $\theta$ :
+<div style="text-align:center"> 
+
+We can try to find a way for the ELBO maximization objective below. 
+
+</div>
 
 $$
 \max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
+<br>
 
-We can derive:
+<div style="text-align:center"> 
+
+We can get the gradient of the expectation with respect to $\theta$: 
+
+</div>
+
+
 
 $$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
+<br>
 
-And we can approximate this expectation by Monte Carlo sampling:
+<div style="text-align:center"> 
+
+And we can approximate this expectation by Monte Carlo sampling: 
+
+</div>
+
 
 $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
 
+<br>
+
+
+The thing went well with the $\theta$, but we also have to consider the gradient with respect to $\phi$. If we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to achieve this goal.<br>
+
 <p style="font-size:19px">But, what if the assumptions above fails? (z is not continuous).</p>
-In this case, we can utilize the REINFORCE Method, explained in th next section.
+In this case, one of things that can be done is utilizing the REINFORCE Method, explained in the next section.
 
 
 <br>
@@ -156,24 +186,44 @@ But with this form, we cannot calculate the gradient directly (since it is infea
 
 
 $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
+<br>
+
+<div style="text-align:center"> 
 
 Expand the expectation:
 
+</div>
+
 $$= \frac{\partial}{\partial \phi_{i}} \sum_{z} q_{\phi}(z) f(z)$$
+<br>
+
+<div style="text-align:center"> 
 
 Take the derivative inside the sum:
 
+</div>
+
 $$ = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+<br>
+
+<div style="text-align:center"> 
 
 Introduce $\dfrac{q_{\phi}(z)}{q_{\phi}(z)}$:
+
+</div>
 
 $$ = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
 Here is the important part. We have the log-derivative rule $\dfrac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} = \dfrac{1}{q_{\phi}(z)} \dfrac{\partial q_{\phi}(z)}{\partial \phi_{i}}$. So, we can rewrite the equation above as:
 
 $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+<br>
+
+<div style="text-align:center"> 
 
 Now, we can rewrite the equation as an expectation:
+
+</div>
 
 $$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
 
