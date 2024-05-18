@@ -23,11 +23,9 @@
 5.  [Neural Variational Inference and Learning (NVIL)](#neural-variational-inference-and-learning-nvil)
 6.  [Towards Reparameterized, Continuous Relaxations](#towards-reparameterized-continuous-relaxations)
 7.  [Categorical Distributions and Gumbel-Softmax](#categorical-distributions-and-gumbel-softmax)
-8.  [Permutations](#permutations)
-9.  [Plackett-Luce (PL) Distribution](#plackett-luce-pl-distribution)
-10. [Relaxing PL Distribution to Gumbel-PL](#relaxing-pl-distribution-to-gumbel-pl)
-11. [Summary and Conclusions](#summary-and-conclusions)
-12. [References](#references)
+8.  [Combinatorial, Discrete Objects](#combinatorial-discrete-objects)
+9.  [Summary and Conclusions](#summary-and-conclusions)
+10. [References](#references)
 
 
 
@@ -468,7 +466,9 @@ $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 <br>
 <br>
 
-## Combinatorial, Discrete Objects:<br>
+## Combinatorial, Discrete Objects 
+
+<br>
 
 ### Permutations
 
