@@ -46,14 +46,17 @@ To illustrate the importance of discrete latent variables, consider several exam
 </div>
 
 <br>
+<br>
 
 <div style="text-align: center;">
     <figure>
     <img src="figures/Screenshot from 2024-05-14 18-41-41.png" alt="Game state">
+    <br>
     <figcaption><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named Sokoban.</figcaption>
     </figure>
 </div>
 
+<br>
 <br>
 
 <div style="text-align: center;">
