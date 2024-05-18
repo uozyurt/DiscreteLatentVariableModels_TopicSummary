@@ -1,14 +1,14 @@
-# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><div style="text-align:center">METU CENG 796 / Sprindiv 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
 
-# <div style="text-align:center">Discrete Latent Variable Models</div>
+# <p style="text-align:center">Discrete Latent Variable Models</p>
 
-## <div style="text-align:center">Topic Summary</div>
+## <p style="text-align:center">Topic Summary</p>
 
 
-#### <div style="text-align:center">Topic Summary Authors</div>
+#### <p style="text-align:center">Topic Summary Authors</p>
 
-### <div style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</div>
-### <div style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</div>
+### <p style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
+### <p style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
 
 
 
@@ -112,44 +112,28 @@ $$
 <br>
 
 
-<div style="text-align:center"> 
-
-Now, we can consider the following objective: 
-
-</div>
+<p style="text-align:center"> Now, we can consider the following objective: </p>
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
 <br>
 
-<div style="text-align:center"> 
-
-We can try to find a way for the ELBO maximization objective below. 
-
-</div>
+<p style="text-align:center"> We can try to find a way for the ELBO maximization objective below. </p>
 
 $$
 \max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
 <br>
 
-<div style="text-align:center"> 
-
-We can get the gradient of the expectation with respect to $\theta$: 
-
-</div>
+<p style="text-align:center"> We can get the gradient of the expectation with respect to $\theta$: </p>
 
 
 
 $$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
 <br>
 
-<div style="text-align:center"> 
-
-And we can approximate this expectation by Monte Carlo sampling: 
-
-</div>
+<p style="text-align:center"> And we can approximate this expectation by Monte Carlo sampling: </p>
 
 
 $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
@@ -191,22 +175,14 @@ $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
 
 <br>
 
-<div style="text-align:center"> 
-
-Expand the expectation: 
-
-</div>
+<p style="text-align:center"> Expand the expectation: </p>
 
 
 $$= \frac{\partial}{\partial \phi_{i}} \sum_{z} q_{\phi}(z) f(z)$$
 
 <br>
 
-<div style="text-align:center"> 
-
-Take the derivative inside the sum: 
-
-</div>
+<p style="text-align:center"> Take the derivative inside the sum: </p>
 
 
 
@@ -214,11 +190,7 @@ $$ = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
 <br>
 
-<div style="text-align:center"> 
-
-Multiply and divide with q (no effect): 
-
-</div>
+<p style="text-align:center"> Multiply and divide with q (no effect): </p>
 
 
 $$ = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
@@ -235,11 +207,7 @@ $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z
 
 <br>
 
-<div style="text-align:center"> 
-
-Now, we can rewrite the equation as an expectation in its final form: 
-
-</div>
+<p style="text-align:center"> Now, we can rewrite the equation as an expectation in its final form: </p>
 
 
 $$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
