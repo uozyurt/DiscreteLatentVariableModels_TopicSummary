@@ -78,7 +78,6 @@ The natural and abundant presence of discrete attributes in these data domains s
 
 In summary, the widespread occurrence of discrete data in various domains highlights the necessity of discrete latent variable models. These models provide a more accurate and meaningful representation of the underlying data structures, making them indispensable for working with real-world data.
 
-<br>
 
 ## Stochastic Optimization
 
@@ -552,7 +551,7 @@ DNA sequence data representation: https://www.researchgate.net/figure/A-human-DN
 Game state data representation: https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
 
 <a id="Fig3">[Fig 3]</a>
-TODO: ADD EXPLANATION AND CITATION
+Zachary’s Karate Club graph: Zachary W. (1977). An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33, 452-473.
 
 <a id="Fig4">[Fig 4]</a>
 Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
