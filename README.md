@@ -557,6 +557,8 @@ Comparison of the Score function estimator (REINFORCE), Reparametrization trick 
 
 ### Additional Notes:
 
+TODO: Check if the source below citeable
+
 * For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
 * Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
