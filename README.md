@@ -283,27 +283,27 @@ Control variates are auxiliary terms that help in reducing the variance of an es
 1. **Baseline Subtraction**:  
    The variance of the gradient estimator can be reduced by subtracting a baseline $b(x)$ from the objective function:
 
-   $$
-   \nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $$
+$$
+\nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)
+$$
 
    The baseline $b(x)$ is ideally the expectation of $f$, which minimizes the variance of the gradient estimator without introducing bias.
 
 2. **Learned Baselines**:  
    Instead of a fixed baseline, NVIL often uses a neural network to learn an adaptive baseline $b_\psi(x)$:
 
-   $$
-   \nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $$
+$$
+\nabla_{\phi} E_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)
+$$
 
    The parameters $\psi$ of the baseline network are optimized to minimize the variance of the gradient estimates.
 
 3. **Control Variate Networks**:  
    NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
 
-   $$
-   \nabla_{\phi} L(\phi) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
-   $$
+$$
+\nabla_{\phi} L(\phi) = E_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
+$$
 
    A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
 
