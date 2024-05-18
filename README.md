@@ -188,17 +188,151 @@ This form can be interpreted as a gradient update, weighted in a way which maxim
 
 TODO: add citations and more comments
 
+## Variational Learning of Latent Variable Models
+
+Variational learning is a powerful technique in probabilistic modeling and Bayesian inference, providing a scalable alternative to traditional methods like Markov Chain Monte Carlo (MCMC). The core idea is to approximate complex, intractable posterior distributions $p(\mathbf{z}|\mathbf{x})$ with a simpler, parameterized family of distributions $q(\mathbf{z}; \phi)$. The parameters $\phi$ of the variational distribution are optimized to minimize the Kullback-Leibler (KL) divergence between $q(\mathbf{z}; \phi)$ and the true posterior $p(\mathbf{z}|\mathbf{x})$.
+
+The variational learning approach typically optimizes the Evidence Lower Bound (ELBO), defined as:
+
+$$
+\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
+$$
+
+Maximizing the ELBO is equivalent to minimizing the KL divergence, thereby making $q(\mathbf{z}; \phi)$ a good approximation of $p(\mathbf{z}|\mathbf{x})$.
+
+While this framework works well for continuous latent variables, handling discrete latent variables introduces significant challenges. Discrete variables do not allow for the straightforward application of gradient-based optimization techniques due to their non-differentiable nature. This makes the direct computation of gradients of the ELBO with respect to the parameters $\phi$ infeasible. Consequently, alternative methods, such as the REINFORCE algorithm, are employed to estimate these gradients.
 
 
-<br>
-<br>
+The ELBO can be expressed as:
 
-<div style="text-align: center;">
-    <figure>
-    <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
-    </figure>
-</div>
+$$
+\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
+$$
+
+or
+
+$$
+\mathcal{L}(x; \theta, \phi) = \mathbb{E}_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]
+$$
+
+Here, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. To consider this, we define a function $f$ that includes $\phi$, $\theta$, $z$, and $x$. The objective function can be rewritten as:
+
+$$
+\mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)
+$$
+
+The REINFORCE rule for this objective function is:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]
+$$
+
+This rule is more generic since $f$ also depends on the $\phi$ parameter. To estimate the ELBO's gradient with respect to $\phi$ using Monte Carlo, we have:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)
+$$
+
+
+The REINFORCE rule is viable for gradient estimation with discrete variables but suffers from high variance in gradient estimates, leading to slow convergence. The variance issue arises due to the stochastic nature of the samples used in Monte Carlo estimates. Each sample $\mathbf{z}^{(i)}$ can lead to a significantly different value of the log-likelihood ratio $\log p(\mathbf{x}, \mathbf{z}^{(i)}) - \log q(\mathbf{z}^{(i)}; \phi)$, resulting in large fluctuations in gradient estimates. This high variance can be attributed to:
+
+1. **Inherent stochasticity**: Discrete latent variables amplify the variance in gradient estimates.
+2. **Log-likelihood ratio**: The term $\log p(\mathbf{x}, \mathbf{z}^{(i)}) - \log q(\mathbf{z}^{(i)}; \phi)$ can vary widely, especially when $q(\mathbf{z}; \phi)$ is a poor approximation of $p(\mathbf{z}|\mathbf{x})$.
+
+
+For example, in a Gaussian distribution parameterized by $\theta$:
+
+$$
+\nabla_{\theta} \mathbb{E}_{q} [x^2]
+$$
+
+with $q_{\theta}(x) = N(\theta, 1)$, the variance is:
+
+$$
+\mathbb{E}_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = \mathbb{E}_{q} [x^2 (x - \theta)]
+$$
+
+Using the reparameterization trick reduces variance, leading to faster convergence:
+
+$$
+x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
+$$
+
+$$
+\nabla_{\theta} \mathbb{E}_{q} [x^2] = \nabla_{\theta} \mathbb{E}_{p} [(\theta + \epsilon)^2] = \mathbb{E}_{p} [2(\theta + \epsilon)]
+$$
+
+However, as previously discussed, the reparameterization trick cannot be applied to discrete latent variables. While REINFORCE offers a method for gradient estimation with discrete variables, its high variance presents challenges for efficient optimization. To address this issue, strategies involving control variates will be discussed in the following section.
+
+## Neural Variational Inference and Learning (NVIL)
+
+Neural Variational Inference and Learning (NVIL) represents an advancement in variational inference, particularly tailored for belief networks with discrete latent variables. The high variance in gradient estimates is mitigated in NVIL through the use of control variates.
+
+NVIL extends the traditional variational inference framework by employing neural networks to parameterize the variational distribution $q(\mathbf{z}; \phi)$. The ELBO remains the objective to be maximized:
+
+$$
+\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
+$$
+
+For discrete latent variables, the REINFORCE algorithm is often used to estimate gradients. As noted, this approach suffers from high variance due to the stochastic nature of the samples and the variability in the log-likelihood ratio. NVIL addresses these issues using control variates, significantly reducing variance and enhancing convergence.
+
+Control variates are auxiliary terms that help in reducing the variance of an estimator. In the context of NVIL, these are employed to stabilize the gradient estimates of the ELBO.
+
+1. **Baseline Subtraction**:  
+   The variance of the gradient estimator can be reduced by subtracting a baseline $b(x)$ from the objective function:
+
+   $$
+   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)]
+   $$
+
+   The baseline $b(x)$ is ideally the expectation of $f$, which minimizes the variance of the gradient estimator without introducing bias.
+
+2. **Learned Baselines**:  
+   Instead of a fixed baseline, NVIL often uses a neural network to learn an adaptive baseline $b_\psi(x)$:
+
+   $$
+   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)]
+   $$
+
+   The parameters $\psi$ of the baseline network are optimized to minimize the variance of the gradient estimates.
+
+3. **Control Variate Networks**:  
+   NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
+
+   $$
+   \nabla_{\phi} \mathcal{L}(\phi) = \mathbb{E}_{q_{\phi}(z|x)} \left[ (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x) \right]
+   $$
+
+   A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
+
+To illustrate the variance reduction, let's compare the REINFORCE rule with and without control variates. The REINFORCE gradient estimate is:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x)]
+$$
+
+In contrast, with a control variate $c(z)$:
+
+$$
+\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \mathbb{E}_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)]
+$$
+
+The variance reduction is mathematically evident if $c(z)$ is a good approximation of $f(\phi, \theta, z, x)$, as it reduces the magnitude of $f(\phi, \theta, z, x) - c(z)$.
+
+Control variates help in reducing variance by effectively isolating the noise component of the gradient estimate. By introducing a term $c(z)$ that approximates the expected value of the objective function, the variability around the mean is reduced. This stabilization allows for more accurate and consistent gradient estimates. Mathematically, this is seen in the term $f(\phi, \theta, z, x) - c(z)$, where $c(z)$ captures much of the fluctuation, leading to a smaller and more stable difference, and thus lower variance.
+
+While NVIL provides significant improvements, it also has limitations:
+
+1. **Complexity**: The introduction of control variate networks and learned baselines increases the computational and implementation complexity. Training additional neural networks alongside the main model requires more resources.
+
+2. **Hyperparameter Sensitivity**: NVIL involves additional hyperparameters, such as those for the control variate networks, which can complicate the optimization process. Finding the right set of hyperparameters can be challenging and may require extensive tuning.
+
+3. **Scalability**: For very large and complex models, the effectiveness of control variates can diminish, as the approximation $c(z)$ might not capture all the variance, especially in high-dimensional spaces.
+
+4. **Dependence on Quality of Control Variates**: The effectiveness of variance reduction heavily relies on the quality of the control variate. If $c(z)$ poorly approximates the true expectation, the variance reduction may be minimal.
+
+The Neural Variational Inference and Learning (NVIL) method significantly enhances the efficiency of variational learning for belief networks with discrete latent variables. By incorporating control variates, NVIL addresses the high variance in gradient estimates, a critical issue in traditional variational learning methods. This results in more stable and faster convergence, making NVIL a powerful approach for complex probabilistic modeling and Bayesian inference. However, the added complexity, hyperparameter sensitivity, and scalability issues necessitate the exploration of more robust and effective algorithms for learning discrete latent variables. In the following sections, we will investigate continuous relaxations of discrete random variables as a widely used alternative.
+
 
 ## Towards Reparameterized, Continuous Relaxations
 
