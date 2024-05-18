@@ -23,11 +23,9 @@
 5.  [Neural Variational Inference and Learning (NVIL)](#neural-variational-inference-and-learning-nvil)
 6.  [Towards Reparameterized, Continuous Relaxations](#towards-reparameterized-continuous-relaxations)
 7.  [Categorical Distributions and Gumbel-Softmax](#categorical-distributions-and-gumbel-softmax)
-8.  [Permutations](#permutations)
-9.  [Plackett-Luce (PL) Distribution](#plackett-luce-pl-distribution)
-10. [Relaxing PL Distribution to Gumbel-PL](#relaxing-pl-distribution-to-gumbel-pl)
-11. [Summary and Conclusions](#summary-and-conclusions)
-12. [References](#references)
+8.  [Combinatorial, Discrete Objects](#combinatorial-discrete-objects)
+9.  [Summary and Conclusions](#summary-and-conclusions)
+10. [References](#references)
 
 
 
@@ -83,7 +81,7 @@ In summary, the widespread occurrence of discrete data in various domains highli
 
 ## Stochastic Optimization
 
-The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
+The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way. Moreover, SGD (or mini-batch gradient descent) may reduce the chance of converging to an poor-performing local minimum by simply skipping it with the help of this stochasticity.<br>
 
 Recap from VAE content:<br>
 
@@ -167,7 +165,7 @@ In this case, one of things that can be done is utilizing the REINFORCE Method, 
 
 ## REINFORCE Method
 
-REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights [[1]](#1). It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
+REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights. It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
 <b>RE</b>ward <b>I</b>ncrement = <b>N</b>on-negative <b>F</b>actor × <b>O</b>ffset <b>R</b>einforcement × <b>C</b>haracteristic <b>E</b>ligibility
 
 It's main goal is to optimize the expected reward, but it can be used in the problems where discrete latent variables or discrete actions exist. We are going to use the REINFORCE method to optimize the following objective function:
@@ -235,7 +233,6 @@ $$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabl
 
 This form can be interpreted as a gradient update, weighted in a way which maximizes the expected reward.
 
-TODO: add citations and more comments
 
 ## Variational Learning of Latent Variable Models
 
@@ -436,39 +433,67 @@ where $\pi_k$ is the probability of the $k^{th}$ category, and sum of all $\pi_k
 
 In this conditions, ve can respesent $z$ as a one-hot vector, where $z = \{\pi_1, \pi_2, ..., \pi_K\}$. <br>
 
-Now, we can apply a calculation known as the Gumbel-Max trick [[4](#4),[5](#5)], which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
+Now, we can apply a calculation known as the Gumbel-Max trick, which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
 
 Here, $g_i$ is a Gumbel random variable sampled from the standard Gumbel distribution ($\mu = 0, \beta = 1$), and $\log \pi_i$ is the log probability of the $i^{th}$ category. <br>
 
-TODO: continute to this part
+Now, we can sample from a categorical distribution using the Gumbel-Max trick, but the sampling is not differentiable (since it uses the argmax function). To make it differentiable, we can use the Gumbel-Softmax trick, which replaces the argmax function with a softmax function, adding a temperature parameter $\tau$ to control the smoothness of the distribution: <br>
 
-Slide 32:<br>
-
-
-$$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
-
-$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
-
-Slide 33:<br>
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/gumbel_softmax.png alt="gumbel_softmax formula">
+    <figcaption><a href="#Fig5,6">[Fig5]</a>. Gumbel-Softmax formula </figcaption>
+    </figure>
+</div>
 
 
-$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
+In the formula above, $g_i$ is a Gumbel random variable, $\tau$ is the temperature parameter, and $x_i$ is the logits where $x_i = \log \pi_i$. <br>
 
-Slide 35:<br>
+Using the Gumbel-Softmax sampler (which is differentiable with respect to $\pi$), we can now use the reparameterization trick to optimize the parameters of the categorical distribution since we can satisfy the assumptions. <br>
+
+In the original Gumbel-Softmax paper, it is observed that the temperature parameter $\tau$ can be annealed during training to improve the convergence of the model. <br>
+
+The effect of the temperature parameter on the Gumbel-Softmax output is shown below: <br>
+
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/effect_of_temperature.png alt="effect of the temperature parameter">
+    <figcaption><a href="#Fig5,6">[Fig6]</a>. Effect of the temperature parameter in the Gumbe-Softmax output </figcaption>
+    </figure>
+</div>
+
+When the temperature parameter is high, the distribution is more uniform, and when it is low, the distribution is more peaked. More specifically, when $\tau$ approaches 0, the sampling process is equivalent to the argmax function, and when $\tau$ approaches infinity, the sampling process is equivalent to the uniform distribution. <br> 
+
+<br>
+<br>
+
+To summarize what we have achieved by Gumbel-Softmax trick: <br>
+<br>
 
 
+We normally have the objective:
 $$\max_{\phi} E_{q_{\phi}(z)} [f(z)]$$
+<br>
+
+And now, we change $z$ to $\hat{z}$, where $\hat{z}$ is the Gumbel-Softmax sample. We can now write the objective as:
 
 $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
+Using the Gumbel-Softmax trick ($\hat{z}$ value), the calculation of gradients in the backpropagation process is possible (softmax is differentiable), and the optimization of the parameters $\phi$ can be achieved. <br>
+
+Note that the $\phi$ contains $\pi$ values and $\tau$ value (as declared, $\tau$ can be explicitly controlled). <br>
+
+
 
 <br>
 <br>
 
-## Combinatorial, Discrete Objects:<br>
+## Combinatorial, Discrete Objects 
+
+<br>
 
 ### Permutations
 
@@ -505,22 +530,28 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption><a href="#Fig5">[Fig5]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
+    <figcaption><a href="#Fig7">[Fig7]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
     </figure>
 </div>
+
+In this topic summary, we examined various methods and challenges associated with discrete latent variables, stochastic optimization, and variational learning.
+
+Discrete latent variables are crucial for accurately modeling real-world data structures that exhibit inherent discreteness. This discrete nature poses challenges for gradient-based optimization methods, necessitating specialized techniques for efficient learning since the direct application of the reparameterization trick is not feasible.
+
+Stochastic optimization, exemplified by variational autoencoders (VAEs), provides scalable solutions for complex probabilistic models by optimizing the Evidence Lower Bound (ELBO).
+
+The REINFORCE method, despite being effective for discrete latent variables and non-differentiable objectives, is limited by high variance in gradient estimates. To mitigate this issue, we explored Neural Variational Inference and Learning (NVIL), which uses control variates and learned baselines for stabilization.
+
+We also discussed continuous relaxations using the Gumbel distribution, enabling gradient-based optimization techniques. The Gumbel-Softmax trick and the reparameterization of the Plackett-Luce (PL) distribution were presented as practical approaches for managing categorical and permutation-based models.
+
+Our exploration highlights the necessity of developing efficient and scalable methods for discrete latent variable models to enhance their applicability to increasingly complex and high-dimensional data structures in future research.
+
+
 
 
 ## References
 
 
-### References (contextual)
-Example citation generator:<br>
-https://www.scribbr.com/citation/generator/ <br> <br>
-TODO: make the references appropriate <br>
-Example reference usage : [[5]](#5) <br>
-Example reference usage : ([Yigit, 2022](#6)) <br>
-Example reference usage : ([Ozyurt et al., 2023](#2))
-<br>
 <br>
 <br>
 
@@ -567,28 +598,28 @@ Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization wi
 
 <br>
 
-<a id="a">[a]</a> 
+<a id="7">[7]</a> 
 Gadetsky, A., Struminsky, K., Robinson, C., Quadrianto, N., & Vetrov, D. (2020). Low-Variance Black-Box gradient estimates for the Plackett-Luce distribution. Proceedings of the . . . AAAI Conference on Artificial Intelligence, 34(06), 10126–10135. https://doi.org/10.1609/aaai.v34i06.6572
 
 <br>
 
     
-<a id="b">[b]</a> 
+<a id="8">[8]</a> 
 Oosterhuis, H. (2022). Computationally Efficient Optimization of Plackett-Luce Ranking Models for Relevance and Fairness (Extended Abstract). Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence. https://doi.org/10.24963/ijcai.2022/743
 
 
 <br>
 
-<a id="c">[c]</a> 
+<a id="9">[9]</a> 
 Richard S. Sutton and Andrew G. Barto. Reinforcement Learning: An Introduction; 2nd Edition. 2017.
 
 <br>
 
-<a id="d">[d]</a> 
+<a id="10">[10]</a> 
 Mnih, A. &amp; Gregor, K.. (2014). Neural Variational Inference and Learning in Belief Networks. <i>Proceedings of the 31st International Conference on Machine Learning</i>, in <i>Proceedings of Machine Learning Research</i> 32(2):1791-1799 Available from https://proceedings.mlr.press/v32/mnih14.html.
 
 <br>
-<a id="e">[e]</a> 
+<a id="11">[11]</a> 
 Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Science and Statistics). https://dl.acm.org/citation.cfm?id=1162264
 <br>
 
@@ -596,20 +627,31 @@ Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Scie
 
 
 <a id="Fig1">[Fig 1]</a>
-DNA sequence data representation: https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
+DNA sequence data representation: <br> 
+https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
 
 <a id="Fig2">[Fig 2]</a>
-Game state data representation: https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
+Game state data representation: <br> 
+https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
 
 <a id="Fig3">[Fig 3]</a>
+A network representation of social relationships among the 34 individuals in the karate club studied by Zachary: <br> 
 Zachary’s Karate Club graph: Zachary W. (1977). An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33, 452-473.
 
 <a id="Fig4">[Fig 4]</a>
-Gumbel Distribution Probability Distribution Function Visualization: https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
+Gumbel Distribution Probability Distribution Function Visualization: <br> 
+https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
 
 
-<a id="Fig5">[Fig 5]</a>
-Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
+
+<a id="Fig5,6">[Fig 5,6]</a>
+Gumbel-Softmax formula: <br> 
+Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
+
+
+<a id="Fig7">[Fig 7]</a>
+Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: <br> 
+https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
 
 
 <br>
@@ -617,8 +659,7 @@ Comparison of the Score function estimator (REINFORCE), Reparametrization trick 
 
 ### Additional Notes:
 
-TODO: Check if the source below citeable
 
-* For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
+* For the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
 * Gpt4o is used to strengthen the text in some places, and to obtain equations (from images).
