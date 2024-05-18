@@ -213,7 +213,7 @@ $$
 or
 
 $$
-\mathcal{L}(x; \theta, \phi) = - \log q_{\phi}(z|x)
+\mathcal{L}(x; \theta, \phi) = \mathbb{E}_\{ q_{\phi}(z|x)\} \[ \log p(z,x;\theta) - \log q_{\phi}(z|x) \]
 $$
 
 Here, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. To consider this, we define a function $f$ that includes $\phi$, $\theta$, $z$, and $x$. The objective function can be rewritten as:
