@@ -165,7 +165,7 @@ In this case, one of things that can be done is utilizing the REINFORCE Method, 
 
 ## REINFORCE Method
 
-REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights [[1]](#1). It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
+REINFORCE is a monte carlo variation of a policy gradient method which is used to update a network's weights. It was introduced by Ronald J. Williams in 1992, and the name "<b>REINFORCE</b>" is an acronym for : <br>
 <b>RE</b>ward <b>I</b>ncrement = <b>N</b>on-negative <b>F</b>actor × <b>O</b>ffset <b>R</b>einforcement × <b>C</b>haracteristic <b>E</b>ligibility
 
 It's main goal is to optimize the expected reward, but it can be used in the problems where discrete latent variables or discrete actions exist. We are going to use the REINFORCE method to optimize the following objective function:
@@ -434,7 +434,7 @@ where $\pi_k$ is the probability of the $k^{th}$ category, and sum of all $\pi_k
 
 In this conditions, ve can respesent $z$ as a one-hot vector, where $z = \{\pi_1, \pi_2, ..., \pi_K\}$. <br>
 
-Now, we can apply a calculation known as the Gumbel-Max trick [[4](#4),[5](#5)], which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
+Now, we can apply a calculation known as the Gumbel-Max trick, which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
@@ -514,13 +514,6 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 
 
 ### References (contextual)
-Example citation generator:<br>
-https://www.scribbr.com/citation/generator/ <br> <br>
-TODO: make the references appropriate <br>
-Example reference usage : [[5]](#5) <br>
-Example reference usage : ([Yigit, 2022](#6)) <br>
-Example reference usage : ([Ozyurt et al., 2023](#2))
-<br>
 <br>
 <br>
 
