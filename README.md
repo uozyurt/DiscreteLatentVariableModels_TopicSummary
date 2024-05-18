@@ -445,7 +445,7 @@ Now, we can sample from a categorical distribution using the Gumbel-Max trick, b
 <div style="text-align: center;">
     <figure>
     <img src=figures/gumbel_softmax.png alt="gumbel_softmax formula">
-    <figcaption><a href="#Fig6,7">[Fig6]</a>. Gumbel-Softmax formula </figcaption>
+    <figcaption><a href="#Fig5,6">[Fig5]</a>. Gumbel-Softmax formula </figcaption>
     </figure>
 </div>
 
@@ -461,7 +461,7 @@ The effect of the temperature parameter on the Gumbel-Softmax output is shown be
 <div style="text-align: center;">
     <figure>
     <img src=figures/effect_of_temperature.png alt="effect of the temperature parameter">
-    <figcaption><a href="#Fig6,7">[Fig7]</a>. Effect of the temperature parameter in the Gumbe-Softmax output </figcaption>
+    <figcaption><a href="#Fig5,6">[Fig6]</a>. Effect of the temperature parameter in the Gumbe-Softmax output </figcaption>
     </figure>
 </div>
 
@@ -530,15 +530,28 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption><a href="#Fig5">[Fig5]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
+    <figcaption><a href="#Fig7">[Fig7]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
     </figure>
 </div>
+
+In this topic summary, we examined various methods and challenges associated with discrete latent variables, stochastic optimization, and variational learning.
+
+Discrete latent variables are crucial for accurately modeling real-world data structures that exhibit inherent discreteness. This discrete nature poses challenges for gradient-based optimization methods, necessitating specialized techniques for efficient learning since the direct application of the reparameterization trick is not feasible.
+
+Stochastic optimization, exemplified by variational autoencoders (VAEs), provides scalable solutions for complex probabilistic models by optimizing the Evidence Lower Bound (ELBO).
+
+The REINFORCE method, despite being effective for discrete latent variables and non-differentiable objectives, is limited by high variance in gradient estimates. To mitigate this issue, we explored Neural Variational Inference and Learning (NVIL), which uses control variates and learned baselines for stabilization.
+
+We also discussed continuous relaxations using the Gumbel distribution, enabling gradient-based optimization techniques. The Gumbel-Softmax trick and the reparameterization of the Plackett-Luce (PL) distribution were presented as practical approaches for managing categorical and permutation-based models.
+
+Our exploration highlights the necessity of developing efficient and scalable methods for discrete latent variable models to enhance their applicability to increasingly complex and high-dimensional data structures in future research.
+
+
 
 
 ## References
 
 
-### References (contextual)
 <br>
 <br>
 
@@ -585,28 +598,28 @@ Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization wi
 
 <br>
 
-<a id="a">[a]</a> 
+<a id="7">[7]</a> 
 Gadetsky, A., Struminsky, K., Robinson, C., Quadrianto, N., & Vetrov, D. (2020). Low-Variance Black-Box gradient estimates for the Plackett-Luce distribution. Proceedings of the . . . AAAI Conference on Artificial Intelligence, 34(06), 10126–10135. https://doi.org/10.1609/aaai.v34i06.6572
 
 <br>
 
     
-<a id="b">[b]</a> 
+<a id="8">[8]</a> 
 Oosterhuis, H. (2022). Computationally Efficient Optimization of Plackett-Luce Ranking Models for Relevance and Fairness (Extended Abstract). Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence. https://doi.org/10.24963/ijcai.2022/743
 
 
 <br>
 
-<a id="c">[c]</a> 
+<a id="9">[9]</a> 
 Richard S. Sutton and Andrew G. Barto. Reinforcement Learning: An Introduction; 2nd Edition. 2017.
 
 <br>
 
-<a id="d">[d]</a> 
+<a id="10">[10]</a> 
 Mnih, A. &amp; Gregor, K.. (2014). Neural Variational Inference and Learning in Belief Networks. <i>Proceedings of the 31st International Conference on Machine Learning</i>, in <i>Proceedings of Machine Learning Research</i> 32(2):1791-1799 Available from https://proceedings.mlr.press/v32/mnih14.html.
 
 <br>
-<a id="e">[e]</a> 
+<a id="11">[11]</a> 
 Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Science and Statistics). https://dl.acm.org/citation.cfm?id=1162264
 <br>
 
@@ -630,14 +643,15 @@ Gumbel Distribution Probability Distribution Function Visualization: <br>
 https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
 
 
-<a id="Fig5">[Fig 5]</a>
-Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: <br> 
-https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
 
-<a id="Fig6,7">[Fig 6,7]</a>
+<a id="Fig5,6">[Fig 5,6]</a>
 Gumbel-Softmax formula: <br> 
 Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
 
+
+<a id="Fig7">[Fig 7]</a>
+Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: <br> 
+https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
 
 
 <br>
