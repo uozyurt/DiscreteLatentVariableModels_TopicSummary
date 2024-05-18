@@ -92,7 +92,7 @@ We model our data as $p_{\theta}(x)$, where $x$ is the data and $\theta$ is the 
 
 $$
 p_{\theta}(x) = \sum_{\text{All possible values of } z} p_{\theta}(x, z)$$
-$$ = \sum_{z \in \mathcal{Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
+$$ = \sum_{z \in {Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
 $$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
@@ -195,7 +195,7 @@ Variational learning is a powerful technique in probabilistic modeling and Bayes
 The variational learning approach typically optimizes the Evidence Lower Bound (ELBO), defined as:
 
 $$
-\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
+{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right]
 $$
 
 Maximizing the ELBO is equivalent to minimizing the KL divergence, thereby making $q(\mathbf{z}; \phi)$ a good approximation of $p(\mathbf{z}|\mathbf{x})$.
@@ -207,31 +207,31 @@ The ELBO can be expressed as:
 
 
 $$
-\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
+{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))
 $$
 
 or
 
 $$
-\mathcal{L}(x; \theta, \phi) = \mathbb{E}_\{ q_{\phi}(z|x) \} \[ \log p(z,x;\theta) - \log q_{\phi}(z|x) \]
+{L}(x; \theta, \phi) = {E}_\{ q_{\phi}(z|x) \}  \log p(z,x;\theta) - \log q_{\phi}(z|x)
 $$
 
 Here, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. To consider this, we define a function $f$ that includes $\phi$, $\theta$, $z$, and $x$. The objective function can be rewritten as:
 
 $$
-\mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)
+{E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)
 $$
 
 The REINFORCE rule for this objective function is:
 
 $$
-\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)\]
+\nabla_{\phi} {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)
 $$
 
 This rule is more generic since $f$ also depends on the $\phi$ parameter. To estimate the ELBO's gradient with respect to $\phi$ using Monte Carlo, we have:
 
 $$
-\nabla_{\phi} \mathbb{E}_{q_{\phi}(z)} \[f(z)\] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)
+\nabla_{\phi} {E}_{q_{\phi}(z)} f(z) \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)
 $$
 
 
@@ -244,23 +244,23 @@ The REINFORCE rule is viable for gradient estimation with discrete variables but
 For example, in a Gaussian distribution parameterized by $\theta$:
 
 $$
-\nabla_{\theta} \mathbb{E}_{q} [x^2]
+\nabla_{\theta} {E}_{q} [x^2]
 $$
 
 with $q_{\theta}(x) = N(\theta, 1)$, the variance is:
 
 $$
-\mathbb{E}_{q} \[x^2 \nabla_{\theta} \log q_{\theta}(x)\] = \mathbb{E}_{q} \[x^2 (x - \theta)\]
+{E}_{q} x^2 \nabla_{\theta} \log q_{\theta}(x) = {E}_{q} x^2 (x - \theta)
 $$
 
 Using the reparameterization trick reduces variance, leading to faster convergence:
 
 $$
-x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
+x = \theta + \epsilon, \quad \epsilon \sim {N}(0, 1)
 $$
 
 $$
-\nabla_{\theta} \mathbb{E}_{q} \[x^2\] = \nabla_{\theta} \mathbb{E}_{p} \[(\theta + \epsilon)^2\] = \mathbb{E}_{p} \[2(\theta + \epsilon)\]
+\nabla_{\theta} {E}_{q} x^2 = \nabla_{\theta} {E}_{p} (\theta + \epsilon)^2 = {E}_{p} 2(\theta + \epsilon)
 $$
 
 However, as previously discussed, the reparameterization trick cannot be applied to discrete latent variables. While REINFORCE offers a method for gradient estimation with discrete variables, its high variance presents challenges for efficient optimization. To address this issue, strategies involving control variates will be discussed in the following section.
@@ -272,7 +272,7 @@ Neural Variational Inference and Learning (NVIL) represents an advancement in va
 NVIL extends the traditional variational inference framework by employing neural networks to parameterize the variational distribution $q(\mathbf{z}; \phi)$. The ELBO remains the objective to be maximized:
 
 $$
-\mathcal{L}(\phi) = \mathbb{E}_{q(\mathbf{z}; \phi)} \left\[ \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right\]
+{L}(\phi) = {E}_{q(\mathbf{z}; \phi)} \left \log p(\mathbf{x}, \mathbf{z}) - \log q(\mathbf{z}; \phi) \right
 $$
 
 For discrete latent variables, the REINFORCE algorithm is often used to estimate gradients. As noted, this approach suffers from high variance due to the stochastic nature of the samples and the variability in the log-likelihood ratio. NVIL addresses these issues using control variates, significantly reducing variance and enhancing convergence.
@@ -283,7 +283,7 @@ Control variates are auxiliary terms that help in reducing the variance of an es
    The variance of the gradient estimator can be reduced by subtracting a baseline $b(x)$ from the objective function:
 
    $$
-   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+   \nabla_{\phi} {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b(x)) \nabla_{\phi} \log q_{\phi}(z|x)
    $$
 
    The baseline $b(x)$ is ideally the expectation of $f$, which minimizes the variance of the gradient estimator without introducing bias.
@@ -292,7 +292,7 @@ Control variates are auxiliary terms that help in reducing the variance of an es
    Instead of a fixed baseline, NVIL often uses a neural network to learn an adaptive baseline $b_\psi(x)$:
 
    $$
-   \nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+   \nabla_{\phi} {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - b_\psi(x)) \nabla_{\phi} \log q_{\phi}(z|x)
    $$
 
    The parameters $\psi$ of the baseline network are optimized to minimize the variance of the gradient estimates.
@@ -301,7 +301,7 @@ Control variates are auxiliary terms that help in reducing the variance of an es
    NVIL can incorporate control variate networks, which predict components of the objective function that contribute to high variance. The control variate $c(z)$ is introduced to reduce variance:
 
    $$
-   \nabla_{\phi} \mathcal{L}(\phi) = \mathbb{E}_{q_{\phi}(z|x)} \left\[ (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x) \right\]
+   \nabla_{\phi} {L}(\phi) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
    $$
 
    A well-chosen $c(z)$ can significantly dampen fluctuations in the gradient estimates.
@@ -309,13 +309,13 @@ Control variates are auxiliary terms that help in reducing the variance of an es
 To illustrate the variance reduction, let's compare the REINFORCE rule with and without control variates. The REINFORCE gradient estimate is:
 
 $$
-\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x)\]
+\nabla_{\phi} {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x)
 $$
 
 In contrast, with a control variate $c(z)$:
 
 $$
-\nabla_{\phi} \mathbb{E}_{q_{\phi}(z|x)} \[f(\phi, \theta, z, x)\] = \mathbb{E}_{q_{\phi}(z|x)} \[(f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)\]
+\nabla_{\phi} {E}_{q_{\phi}(z|x)} f(\phi, \theta, z, x) = {E}_{q_{\phi}(z|x)} (f(\phi, \theta, z, x) - c(z)) \nabla_{\phi} \log q_{\phi}(z|x)
 $$
 
 The variance reduction is mathematically evident if $c(z)$ is a good approximation of $f(\phi, \theta, z, x)$, as it reduces the magnitude of $f(\phi, \theta, z, x) - c(z)$.
@@ -377,22 +377,36 @@ Note that the mean is not equal to $\mu$. Actually, when the calculations are do
 
 ## Categorical Distributions and Gumbel-Softmax
 
-Slide 31:<br>
+Categorical Distributions represents the discrete probability distribution of a random variable. It has a specific probability assigned to each distinct category.<br>
+
+We show a categorical distribution $P$ with $K$ categories as:<br>
+
+$$P(X=k) = \pi_k$$
+
+where $\pi_k$ is the probability of the $k^{th}$ category, and sum of all $\pi_k$ is 1.<br>
+
+In this conditions, ve can respesent $z$ as a one-hot vector, where $z = \{\pi_1, \pi_2, ..., \pi_K\}$. <br>
+
+Now, we can apply a calculation known as the Gumbel-Max trick [[4](#4),[5](#5)], which enables sampling from categorical variables, introducing randomness with Gumbel random variables: <br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi_i) \right)$$
+
+Here, $g_i$ is a Gumbel random variable sampled from the standard Gumbel distribution ($\mu = 0, \beta = 1$), and $\log \pi_i$ is the log probability of the $i^{th}$ category. <br>
+
+TODO: continute to this part
 
 Slide 32:<br>
 
 
 $$\mathbf{z} = \text{onehot} \left( \arg \max_{i} (g_i + \log \pi) \right)$$
 
-$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+$$\hat{\mathbf{z}} = \text{soft} \max_{i} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
 
 Slide 33:<br>
 
 
-$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \frac{g_i + \log \pi}{\tau} \right)$$
+$$\hat{\mathbf{z}} = {\text{soft} \max_{i}} \left( \dfrac{g_i + \log \pi}{\tau} \right)$$
 
 Slide 35:<br>
 
@@ -411,13 +425,13 @@ $$\max_{\phi} E_{q_{\phi}(\hat{z})} [f(\hat{z})]$$
 
 In the realm of unsupervised learning, discovering rankings and matchings often necessitates the representation of data as permutations. A $k$-dimensional permutation $\mathbf{z}$ is a ranked list of $k$ indices from the set $\{1, 2, \ldots, k\}$. When dealing with such permutations, we frequently encounter stochastic optimization problems of the form:
 
-$$\max_{\phi} \mathbb{E}_{q_{\phi}(\mathbf{z})}[f(\mathbf{z})], $$
+$$\max_{\phi} {E}_{q_{\phi}(\mathbf{z})}[f(\mathbf{z})], $$
 
 where $q_{\phi}(\mathbf{z})$ is a distribution over $k$-dimensional permutations. One straightforward approach to handle this problem is to treat each permutation as a distinct category, such as relaxing the categorical distribution to a Gumbel-Softmax distribution. However, this method quickly becomes infeasible due to the combinatorial explosion; the number of possible $k$-dimensional permutations is $k!$. The Gumbel-Softmax does not scale well for such a large number of categories, making it unsuitable for practical applications involving large $k$.
 
 ### Plackett-Luce (PL) Distribution
 
-The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations $\mathcal{S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
+The Plackett-Luce (PL) distribution offers a practical solution for modeling rankings in various fields such as information retrieval and social choice theory. The $k$-dimensional PL distribution is defined over the set of permutations ${S}_k$ and is parameterized by $k$ positive scores $\mathbf{s}$. The distribution allows for sequential sampling, where the probability of selecting an item at each step is proportional to its score relative to the remaining items. Specifically, the probability of selecting $z_1 = i$ is given by $p(z_1 = i) \propto s_i$.
 
 This process continues sequentially, sampling $z_2, z_3, \ldots, z_k$ without replacement. The probability density function (PDF) for the PL distribution is given by:
 
@@ -486,21 +500,21 @@ Maddison, C. J., Tarlow, D., & Minka, T. (2014, October 31). A* sampling. arXiv.
 <br>
 
 <a id="4">[4]</a> 
-Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
+Maddison, C. J., Tarlow, D., & Minka, T. (2014c, October 31). A* sampling. arXiv.org. https://arxiv.org/abs/1411.0030
 
 
 
 <br>
 
 <a id="5">[5]</a> 
-FILLER
+Gumbel, E. J. (1954). Statistical theory of extreme valuse and some practical applications. Nat. Bur. Standards Appl. Math. Ser. 33.
 
 
 
 <br>
 
 <a id="6">[6]</a> 
-FILLER
+Jang, E., Gu, S., & Poole, B. (2022, July 21). Categorical Reparameterization with Gumbel-Softmax. OpenReview. https://openreview.net/forum?id=rkE3y85ee¬eId=S1LB3MLul
 
 
 
