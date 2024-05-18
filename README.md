@@ -193,94 +193,12 @@ TODO: add citations and more comments
 <br>
 <br>
 
-## Variational Learning of Latent Variable Models
-
-
-TODO: ADD MORE COMMENTS AND CITATIONS
-
-
-Now, we want to work with the ELBO (Evidence Lower Bound) objective function, which is defined as:
-
-
-$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
-$$= E_{q_{\phi}(z|x)}[\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
-
-As it can be observed, the $- \log q_{\phi}(z|x)$ part is also dependent on the $\phi$ parameter. So, we have to consider a function $f$ which also includes the $\phi$ parameter (also the $\theta$ and $x$). So, instead of $E_{q_{\phi}(z)}[f(z)]$, the objective function can be rewritten as:
-
-$$E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = \sum_{z} q_{\phi}(z|x) f(\phi, \theta, z, x)$$
-
-Now, we can re-write the REINFORCE formula to be used for this objective function:
-
-$$\nabla_{\phi} E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)] = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
-
-Here, this REINFORCE rule is more generic since $f$ is also dependent on the $\phi$ parameter. Now, we can construct a Monte Carlo estimation for the ELBO's gradient w.r.t. $\phi$, just as before.
-
-<br>
-<br>
-
-We have seen that the ELBO objective function can be optimized (maximized) using the REINFORCE method even when the latent variable $z$ is discrete. But, what are the downsides of this method? The main problem is the high variance in the gradient estimates, which can lead to slow convergence. 
-
-
-$$\nabla_{\phi} E_{q_{\phi}(z)} [f(z)] \approx \frac{1}{K} \sum_{k} f(z^k) \nabla_{\phi} \log q_{\phi}(z^k)$$
-
-For the REINFORCE rule above (or the more generic version for the ELBO, which includes $\phi$, $\theta$ and $x$), the variance can be compared with the variance of the reparameterization trick.<br>
-
-
-$$\nabla_{\theta} E_{q} [x^2]$$
-
-$$q_{\theta}(x) = N(\theta, 1)$$
-
-Here, $q_{\theta}(x)$ is a Gaussian distribution parameterized by $\theta$. Calculating the variance:
-
-$$E_{q} [x^2 \nabla_{\theta} \log q_{\theta}(x)] = E_{q} [x^2 (x - \theta)]$$
-
-However, in the reparameterization trick, the variance is much lower, which leads to faster convergence:
-
-$$x = \theta + \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)$$
-
-$$\nabla_{\theta} E_{q} [x^2] = \nabla_{\theta} E_{p} [(\theta + \epsilon)^2] = E_{p} [2(\theta + \epsilon)]$$
-
-
-But still, we cannot use the reparameterization trick for discrete latent variables. The question is: "Are there any other methods to reduce the variance in the gradient estimates for discrete latent variables?" The answer is "Yes", and we are going to discuss the "Gumbel-Softmax" method in the next sections.
-
-
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
     <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
     </figure>
 </div>
-
-<br>
-<br>
-
-## Neural Variational Inference and Learning (NVIL)
-
-TODO: I SKIPPED HERE. We have to talk about the control variates if we are going to talk about NVIL. <br>
-
-Slide 27:<br>
-
-
-$$\mathcal{L}(x; \theta, \phi) = \sum_{z} q_{\phi}(z|x) \log p(z, x; \theta) + H(q_{\phi}(z|x))$$
-
-$$= E_{q_{\phi}(z|x)} [\log p(z, x; \theta) - \log q_{\phi}(z|x)]$$
-
-$$:<br>
-= E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x)]$$
-
-Slide 28:<br>
-
-
-$$\mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [f(\phi, \theta, z, x) - h_{\psi}(x) - B]$$
-
-$$\nabla_{\phi} \mathcal{L}(x; \theta, \phi, \psi, B) = E_{q_{\phi}(z|x)} [(f(\phi, \theta, z, x) - h_{\psi}(x) - B) \nabla_{\phi} \log q_{\phi}(z|x) + \nabla_{\phi} f(\phi, \theta, z, x)]$$
-
-
-
-
-
-<br>
-<br>
 
 ## Towards Reparameterized, Continuous Relaxations
 
@@ -423,7 +341,12 @@ $$\tilde{s}_i = g_i + \log s_i$$
 
 ## Summary and Conclusions
 
-
+<div style="text-align: center;">
+    <figure>
+    <img src=figures/comparison_of_techniques.png alt="technique comparisons">
+    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
+    </figure>
+</div>
 
 
 ## References
