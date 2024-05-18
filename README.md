@@ -50,7 +50,7 @@ To illustrate the importance of discrete latent variables, consider several exam
 <div style="text-align: center;">
     <figure>
     <img src="figures/Screenshot from 2024-05-14 18-41-41.png" alt="Game state">
-    <figcaption><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named sokoban</figcaption>
+    <figcaption><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named Sokoban.</figcaption>
     </figure>
 </div>
 
@@ -58,8 +58,8 @@ To illustrate the importance of discrete latent variables, consider several exam
 
 <div style="text-align: center;">
     <figure>
-    <img src="figures/karate-club.png" alt="Karate Club">
-    <figcaption><a href="#Fig3">[Fig3]</a>. A network representation of social relationships among the 34 individuals in the karate club studied by Zachary.n </figcaption>
+    <img src="figures/karate-_club.png" alt="Karate Club">
+    <figcaption><a href="#Fig3">[Fig3]</a>. A network representation of social relationships among the 34 individuals in the karate club studied by Zachary.</figcaption>
     </figure>
 </div>
 
