@@ -1,14 +1,14 @@
-# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><p style="text-align:center">METU CENG 796 / Spring 24</p></a>
+# <a href="https://user.ceng.metu.edu.tr/~gcinbis/courses/Spring24/CENG796"><div style="text-align:center">METU CENG 796 / Sprindiv 24</p></a>
 
-# <p style="text-align:center">Discrete Latent Variable Models</p>
+# <div style="text-align:center">Discrete Latent Variable Models</div>
 
-## <p style="text-align:center">Topic Summary</p>
+## <div style="text-align:center">Topic Summary</div>
 
 
-#### <p style="text-align:center">Topic Summary Authors</p>
+#### <div style="text-align:center">Topic Summary Authors</div>
 
-### <p style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</p>
-### <p style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</p>
+### <div style="text-align:center">Umut Ozyurt <br> (umuttozyurt@gmail.com, umut.ozyurt@metu.edu.tr)</div>
+### <div style="text-align:center">Melih Gokay Yigit <br> (gokay.yigit@metu.edu.tr)</div>
 
 
 
@@ -23,7 +23,7 @@
 5.  [Neural Variational Inference and Learning (NVIL)](#neural-variational-inference-and-learning-nvil)
 6.  [Towards Reparameterized, Continuous Relaxations](#towards-reparameterized-continuous-relaxations)
 7.  [Categorical Distributions and Gumbel-Softmax](#categorical-distributions-and-gumbel-softmax)
-8.  [Combinatorial, Discrete Objects: Permutations](#combinatorial-discrete-objects-permutations)
+8.  [Combinatorial, Discrete Objects: Permutations](#permutations)
 9.  [Plackett-Luce (PL) Distribution](#plackett-luce-pl-distribution)
 10. [Relaxing PL Distribution to Gumbel-PL](#relaxing-pl-distribution-to-gumbel-pl)
 11. [Summary and Conclusions](#summary-and-conclusions)
@@ -38,13 +38,13 @@
 
 Discrete latent variables are hidden variables in models that take on a finite set of distinct values. They are crucial in decision-making processes and learning structures because they help capture the inherent discreteness in various types of data and systems. <br>
 
-The most natural answer for the "Why should we use them?" question stems from the real-world data representations. One can simply observe how the “data” is represented in the examples below:
+The most compelling answer to the question "Why should we use them?" arises from real-world data representations. One can simply observe how data is represented in the examples below:
 
 
 <div style="text-align: center;">
     <figure>
     <img src="figures/A-human-DNA-and-Part-of-DNA-sequence-28-29.jpg" alt="DNA Sequence">
-    <figcaption><a href="#Fig1">[Fig1]</a>. DNA sequence data representation </figcaption>
+    <figcaption><br><a href="#Fig1">[Fig1]</a>. DNA sequence data representation </figcaption>
     </figure>
 </div>
 
@@ -53,7 +53,7 @@ The most natural answer for the "Why should we use them?" question stems from th
 <div style="text-align: center;">
     <figure>
     <img src="figures/Screenshot from 2024-05-14 18-41-41.png" alt="Game state">
-    <figcaption><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named sokoban</figcaption>
+    <figcaption><br><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named sokoban</figcaption>
     </figure>
 </div>
 
@@ -74,9 +74,9 @@ TODO: ADD GRAPH FIGURE:
 
 
 
-In addition to the DNA sequence, game state and graph representation examples above, we have many additional data domains (e.g. text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data) where the data is/has inherently discrete representations.<br>
+In addition to the DNA sequence, game state, and graph representation examples above, we have many additional data domains (e.g., text data, images, speech and audio, molecules, geographical data, market basket items, programming codes, healthcare records, financial transactions, e-commerce clickstream data) where the data inherently has discrete representations.<br>
 
-This natural and abundant appearance of the discreteness shifts us to use discrete latent variable models, allowing the models to capture the inner meanings/representations of the data better. Moreover, if one wants to work with the <u>real-world</u> data using latent variable models, they probably will confront some <u>assumption fails due to the discontinuoity of the data</u> and change their perception to the discrete latent variables realm.
+This natural and abundant appearance of discreteness shifts us to use discrete latent variable models, allowing the models to capture the inner meanings or representations of the data better. Moreover, if one wants to work with <u>real-world</u> data using latent variable models, they will probably confront some <u>assumptions fail due to the discontinuity of the data</u> and change their perception towards the realm of discrete latent variables.
 
 
 
@@ -85,7 +85,7 @@ This natural and abundant appearance of the discreteness shifts us to use discre
 
 ## Stochastic Optimization
 
-The terms "stochastic optimization" is used for the process of minimizing or maximizing an objective function in the case it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
+The term "stochastic optimization" is used for the process of minimizing or maximizing an objective function when it involves <u>randomness</u>. This non-deterministic optimization process can be useful in many cases, specifically when the data is too large to fit into memory, or when the data is too complex to be processed in a deterministic way (which can reduce the chance of converging to a local minimum if gradient descent is used).<br>
 
 Recap from VAE content:<br>
 
@@ -99,7 +99,7 @@ $$ = \sum_{z \in {Z}} \frac{q(z)}{q(z)} p_{\theta}(x, z)$$
 $$ = E_{z \sim q(z)} \left[ \frac{p_{\theta}(x, z)}{q(z)} \right]
 $$
 
-We can pick a $q(z)$ that is easy to sample from and outputs related values to the true posterior $p(z|x)$. One of the ways to do this is making $q$ has a parameter $\phi$, and trying to optimize it, minimizing the KL divergence between $q(z|x)$ and $p(z|x)$, which can be made by maximizing the ELBO (Evidence Lower Bound) objective function.<br>
+We can pick a $q(z)$ that is easy to sample from and outputs values close to the true posterior $p(z|x)$. One way to do this is by making $q$ have a parameter $\phi$, and trying to optimize it by minimizing the KL divergence between $q(z|x)$ and $p(z|x), which can be done by maximizing the ELBO (Evidence Lower Bound) objective function. <br>
 Roughly, the objective is to maximize the following function (maximizing the ELBO):
 
 $$
@@ -111,29 +111,57 @@ $$
 ---
 <br>
 
-Now, we can consider the following objective:<br>
+
+<div style="text-align:center"> 
+
+Now, we can consider the following objective: 
+
+</div>
 
 $$
 \max_{\phi} E_{q_{\phi}(z)}[f(z)]
 $$
+<br>
 
-Here, if we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to get the gradient of the expectation w.r.t. $\theta$ :
+<div style="text-align:center"> 
+
+We can try to find a way for the ELBO maximization objective below. 
+
+</div>
 
 $$
 \max_{\theta, \phi} E_{q_{\phi}(z|x)} \left[ \log \frac{p_{\theta}(x, z)}{q(z|x)} \right]
 $$
+<br>
 
-We can derive:
+<div style="text-align:center"> 
+
+We can get the gradient of the expectation with respect to $\theta$: 
+
+</div>
+
+
 
 $$\nabla_{\theta} E_{q(z; \phi)} \left[ \log p(z, \mathbf{x}; \theta) - \log q(z; \phi) \right] = E_{q(z; \phi)} \left[ \nabla_{\theta} \log p(z, \mathbf{x}; \theta) \right]$$
+<br>
 
-And we can approximate this expectation by Monte Carlo sampling:
+<div style="text-align:center"> 
+
+And we can approximate this expectation by Monte Carlo sampling: 
+
+</div>
+
 
 $$\approx \frac{1}{k} \sum_{k} \nabla_{\theta} \log p(z^k, \mathbf{x}; \theta)$$
 
 
+<br>
+
+
+The thing went well with the $\theta$, but we also have to consider the gradient with respect to $\phi$. If we assume $z$ is <b>continuous</b>, $q$ is reparametrizable, and $f$ is differentiable, we can use the <b>reparametrization trick</b> to achieve this goal.<br>
+
 <p style="font-size:19px">But, what if the assumptions above fails? (z is not continuous).</p>
-In this case, we can utilize the REINFORCE Method, explained in th next section.
+In this case, one of things that can be done is utilizing the REINFORCE Method, explained in the next section.
 
 
 <br>
@@ -161,25 +189,62 @@ But with this form, we cannot calculate the gradient directly (since it is infea
 
 $$\frac{\partial}{\partial \phi_{i}} E_{q_{\phi}(z)} [f(z)]$$
 
-Expand the expectation:
+<br>
+
+<div style="text-align:center"> 
+
+Expand the expectation: 
+
+</div>
+
 
 $$= \frac{\partial}{\partial \phi_{i}} \sum_{z} q_{\phi}(z) f(z)$$
 
-Take the derivative inside the sum:
+<br>
+
+<div style="text-align:center"> 
+
+Take the derivative inside the sum: 
+
+</div>
+
+
 
 $$ = \sum_{z} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
-Introduce $\dfrac{q_{\phi}(z)}{q_{\phi}(z)}$:
+<br>
+
+<div style="text-align:center"> 
+
+Multiply and divide with q (no effect): 
+
+</div>
+
 
 $$ = \sum_{z} q_{\phi}(z) \frac{1}{q_{\phi}(z)} \frac{\partial q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
+<br>
+
+
+<div style="text-align:center">
 
 Here is the important part. We have the log-derivative rule $\dfrac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} = \dfrac{1}{q_{\phi}(z)} \dfrac{\partial q_{\phi}(z)}{\partial \phi_{i}}$. So, we can rewrite the equation above as:
 
+</div>
+
 $$= \sum_{z} q_{\phi}(z) \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z)$$
 
-Now, we can rewrite the equation as an expectation:
+<br>
+
+<div style="text-align:center"> 
+
+Now, we can rewrite the equation as an expectation in its final form: 
+
+</div>
+
 
 $$ = E_{q_{\phi}(z)} \left[ \frac{\partial \log q_{\phi}(z)}{\partial \phi_{i}} f(z) \right] = E_{q_{\phi}(z)} [f(z) \nabla_{\phi} \log q_{\phi}(z)]$$
+
+<br>
 
 By making these operations, we can now estimate the gradient by sampling z values from $q_{\phi}(z)$, taking the gradient of the log-probability of the z values, and multiplying it with the function value of z. This is the main idea of the REINFORCE method.<br>
 
@@ -203,7 +268,7 @@ $$
 
 Maximizing the ELBO is equivalent to minimizing the KL divergence, thereby making $q(\mathbf{z}; \phi)$ a good approximation of $p(\mathbf{z}|\mathbf{x})$.
 
-While this framework works well for continuous latent variables, handling discrete latent variables introduces significant challenges. Discrete variables do not allow for the straightforward application of gradient-based optimization techniques due to their non-differentiable nature. This makes the direct computation of gradients of the ELBO with respect to the parameters $\phi$ infeasible. Consequently, alternative methods, such as the REINFORCE algorithm, are employed to estimate these gradients.
+While this framework works well for continuous latent variables, handling discrete latent variables introduces significant challenges. Discrete variables do not allow for the straightforward application of gradient-based optimization techniques due to their non-differentiable nature. This makes the direct computation of gradients of the ELBO with respect to the parameters $\phi$ infeasible. Consequently, alternative methods, such as the REINFORCE algorithm, are employed to estimate these gradients.Combinatorial, Discrete Objects: Permutations
 
 
 The ELBO can be expressed as:
@@ -365,7 +430,7 @@ Here are the example of the Gumbel distribution PDF visualizations for a better 
 <div style="text-align: center;">
     <figure>
     <img src=figures/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values.png alt="Gumbel distribution PDF">
-    <figcaption>Fig 5. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here here) https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731 </figcaption>
+    <figcaption><br><a href="#Fig4">[Fig4]</a>. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here here) </figcaption>
     </figure>
 </div>
 
@@ -459,7 +524,7 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption><a href="#Fig4">[Fig4]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
+    <figcaption><br><a href="#Fig5">[Fig5]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
     </figure>
 </div>
 
@@ -547,6 +612,10 @@ Game state data representation: https://medium.com/deepgamingai/game-level-desig
 TODO: ADD EXPLANATION AND CITATION
 
 <a id="Fig4">[Fig 4]</a>
+Gumbel Distribution Probability Distribution Function Visualization: https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
+
+
+<a id="Fig5">[Fig 5]</a>
 Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
 
 
