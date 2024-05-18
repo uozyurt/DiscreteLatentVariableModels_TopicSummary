@@ -411,7 +411,7 @@ Here are the example of the Gumbel distribution PDF visualizations for a better 
 <div style="text-align: center;">
     <figure>
     <img src=figures/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values.png alt="Gumbel distribution PDF">
-    <figcaption>Fig 5. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here here) https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731 </figcaption>
+    <figcaption><a href="#Fig4">[Fig4]</a>. Gumbel Distribution Probability Distribution Function Visualization (beta is replaced with sigma here)  </figcaption>
     </figure>
 </div>
 
@@ -505,7 +505,7 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption><a href="#Fig4">[Fig4]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
+    <figcaption><a href="#Fig5">[Fig5]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
     </figure>
 </div>
 
@@ -594,6 +594,7 @@ Bishop, C. M. (2006). Pattern Recognition and Machine Learning (Information Scie
 
 ### References (Figures)
 
+
 <a id="Fig1">[Fig 1]</a>
 DNA sequence data representation: https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
 
@@ -604,9 +605,11 @@ Game state data representation: https://medium.com/deepgamingai/game-level-desig
 Zachary’s Karate Club graph: Zachary W. (1977). An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33, 452-473.
 
 <a id="Fig4">[Fig 4]</a>
+Gumbel Distribution Probability Distribution Function Visualization: https://www.researchgate.net/figure/Plot-of-the-Gumbel-distribution-for-various-m-and-s-values_fig1_318519731
+
+
+<a id="Fig5">[Fig 5]</a>
 Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
-
-
 
 
 <br>
