@@ -44,7 +44,7 @@ The most natural answer for the "Why should we use them?" question stems from th
 <div style="text-align: center;">
     <figure>
     <img src="figures/A-human-DNA-and-Part-of-DNA-sequence-28-29.jpg" alt="DNA Sequence">
-    <figcaption>Fig 1. DNA sequence data representation https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570 </figcaption>
+    <figcaption><a href="#Fig1">[Fig1]</a>. DNA sequence data representation </figcaption>
     </figure>
 </div>
 
@@ -53,9 +53,12 @@ The most natural answer for the "Why should we use them?" question stems from th
 <div style="text-align: center;">
     <figure>
     <img src="figures/Screenshot from 2024-05-14 18-41-41.png" alt="Game state">
-    <figcaption>Fig 2. Game state data representation from the game named sokoban https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954  </figcaption>
+    <figcaption><a href="#Fig2">[Fig2]</a>. Game state data representation from the game named sokoban</figcaption>
     </figure>
 </div>
+
+
+ 
 
 <br>
 
@@ -456,17 +459,15 @@ In summary, by reparameterizing the PL distribution with Gumbel noise and utiliz
 <div style="text-align: center;">
     <figure>
     <img src=figures/comparison_of_techniques.png alt="technique comparisons">
-    <figcaption>Fig 4. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html </figcaption>
+    <figcaption><a href="#Fig4">[Fig4]</a>. Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods </figcaption>
     </figure>
 </div>
 
 
 ## References
 
-<br>
-<br>
 
-## References
+### References (contextual)
 Example citation generator:<br>
 https://www.scribbr.com/citation/generator/ <br> <br>
 TODO: make the references appropriate <br>
@@ -531,6 +532,23 @@ FILLER
 FILLER
 
 
+<br>
+<br>
+
+### References (Figures)
+
+<a id="Fig1">[Fig 1]</a>
+DNA sequence data representation: https://www.researchgate.net/figure/A-human-DNA-and-Part-of-DNA-sequence-28-29_fig1_341901570
+
+<a id="Fig2">[Fig 2]</a>
+Game state data representation: https://medium.com/deepgamingai/game-level-design-with-reinforcement-learning-52b02bb94954
+
+<a id="Fig3">[Fig 3]</a>
+TODO: ADD EXPLANATION AND CITATION
+
+<a id="Fig4">[Fig 4]</a>
+Comparison of the Score function estimator (REINFORCE), Reparametrization trick and other methods: https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html
+
 
 
 
@@ -538,6 +556,8 @@ FILLER
 <br>
 
 ### Additional Notes:
+
+TODO: Check if the source below citeable
 
 * For the most of the content, slides from cs236 lecture in "Stanford University, prepared by "Stefano Ermon" and "Aditya Grover" have been utilized. <br> 
 
