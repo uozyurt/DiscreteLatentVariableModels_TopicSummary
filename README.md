@@ -58,7 +58,7 @@ To illustrate the importance of discrete latent variables, consider several exam
 
 <div style="text-align: center;">
     <figure>
-    <img src="figures/karate-_club.png" alt="Karate Club">
+    <img src="figures/karate_club.png" alt="Karate Club">
     <figcaption><a href="#Fig3">[Fig3]</a>. A network representation of social relationships among the 34 individuals in the karate club studied by Zachary.</figcaption>
     </figure>
 </div>
